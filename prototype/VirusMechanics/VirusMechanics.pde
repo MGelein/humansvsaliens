@@ -29,13 +29,13 @@ void draw(){
     for(int y = 0; y < cells[0].length; y++){
       float myVal = getC(x, y);
       float leftVal = getC(x - 1, y);
-      if(leftVal < 0.01) setC(x - 1, y, myVal);
+      if(leftVal < 0.01) setC(x - 1, y, myVal / 1.3);
       float rightVal = getC(x + 1, y);
-      if(rightVal < 0.01) setC(x + 1, y, myVal);
+      if(rightVal < 0.01) setC(x + 1, y, myVal / 1.3);
       float upVal = getC(x, y - 1);
-      if(upVal < 0.01) setC(x, y - 1, myVal);
+      if(upVal < 0.01) setC(x, y - 1, myVal / 1.3);
       float downVal = getC(x, y + 1);
-      if(downVal < 0.01) setC(x, y + 1, myVal);
+      if(downVal < 0.01) setC(x, y + 1, myVal / 1.3);
       float avg = (myVal + leftVal + rightVal + upVal + downVal) / 5;
       if(avg == 1){//If we're surrounded by only life cells
         myVal -= 0.2;
@@ -45,7 +45,7 @@ void draw(){
       //If we're weak (<.5) decrease lifeforce
       myVal += (myVal > .5) ? INC : -INC;
       myVal = constrain(myVal, -1, 2);
-      cells[x][y] = myVal;
+      setC(x, y, myVal);
     }
   }
 }
