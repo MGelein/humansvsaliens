@@ -1,11 +1,16 @@
-final int RESOLUTION = 8;//Size of each 'pixel', only use PO2 values
+final int RESOLUTION = 4;//Size of each 'pixel', only use PO2 values
 final float INC = 0.01;//Increase or decrease of lifeforce
 final float SPREAD_CTRL = 1.1f;
+final color bgColor = color(0);
+final color virusColor = color(0, 255, 200);
 
 float[][] cells;
+float heartBeatAngle = 0;
+float heartBeatSpeed = 0.1;
+float heartBeat = 0;
 
 void setup(){
-  size(1280, 360);
+  size(1280, 360, P2D);
   cells = new float[width / RESOLUTION][height / RESOLUTION];
   
   for(int x = 0; x < cells.length; x++){
@@ -13,17 +18,27 @@ void setup(){
       cells[x][y] = 0;
     }
   }
+  
+  blendMode(ADD);
 }
 
 void draw(){
+  //Handle the heartBeat
+  heartBeatAngle += heartBeatSpeed;
+  heartBeat = sin(heartBeatAngle) * .1 + .1;
+  
+  background(0);
   noStroke();
   //Draw them all
-  float bright;
+  float virus;
   for(int x = 0; x < cells.length; x++){
     for(int y = 0; y < cells[0].length; y++){
-      bright = 1 - getC(x, y);
-      fill(bright * 255);
-      rect(x * RESOLUTION, y * RESOLUTION, RESOLUTION, RESOLUTION);
+      virus = getC(x, y);
+      if(virus < .2) virus -= heartBeat;
+      else virus += heartBeat;
+      
+      fill(lerpColor(bgColor, virusColor, virus));
+      square(x * RESOLUTION, y * RESOLUTION, RESOLUTION);
     }
   }
   
@@ -43,7 +58,7 @@ void draw(){
       if(avg == 1){//If we're surrounded by only life cells
         myVal -= 0.2;
       }
-      myVal += (avg - myVal) * random(0.5); //Move a little bit towards the avg
+      myVal += (avg - myVal) * random(0.1); //Move a little bit towards the avg
       //If we're strong (>.5) increase lifeforce
       //If we're weak (<.5) decrease lifeforce
       myVal += (myVal > .3) ? INC : -INC;
