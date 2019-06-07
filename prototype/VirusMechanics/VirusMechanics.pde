@@ -1,6 +1,6 @@
-final int RESOLUTION = 4;//Size of each 'pixel', only use PO2 values
+final int RESOLUTION = 8;//Size of each 'pixel', only use PO2 values
 final float INC = 0.01;//Increase or decrease of lifeforce
-final float SPREAD_CTRL = 1.2f;
+final float SPREAD_CTRL = 1.1f;
 
 float[][] cells;
 
@@ -18,9 +18,11 @@ void setup(){
 void draw(){
   noStroke();
   //Draw them all
+  float bright;
   for(int x = 0; x < cells.length; x++){
     for(int y = 0; y < cells[0].length; y++){
-      fill((1 - getC(x, y))* 255);
+      bright = 1 - getC(x, y);
+      fill(bright * 255);
       rect(x * RESOLUTION, y * RESOLUTION, RESOLUTION, RESOLUTION);
     }
   }
