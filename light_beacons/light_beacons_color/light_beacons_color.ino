@@ -11,11 +11,8 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-//const char* ssid = "Dollard_2.4GHz";
-//const char* password = "ik54j3s94rgq";
-
-const char* ssid = "wlan 3";
-const char* password = "Liacs_8_";
+const char* ssid = "Dollard_2.4GHz";
+const char* password = "ik54j3s94rgq";
 
 int buildinLed = 2;
 
@@ -33,7 +30,7 @@ void setup () {
   digitalWrite(buildinLed, LOW);
 
   pixels.begin(); // This initializes the NeoPixel library.
-  setColor();
+  setColorStart();
 }
 
 void loop() {
@@ -44,8 +41,8 @@ void loop() {
     int httpCode = http.GET();                                                                  //Send the request
 
     if (httpCode > 0) { //Check the returning code
-      String payload = http.getString();   //Get the request response payload
-      setBright(payload);
+      String payloadBrightness = http.getString();   //Get the request response payload
+      setBright(payloadBrightness);
     }
     http.end();   //Close connection
   }
@@ -56,19 +53,30 @@ void setBright(String inString) {
   int brightness = 0;
   float value = inString.toFloat();
   value = value * 1000;
-  Serial.println(value);
+  //Serial.println(value);
   brightness = map(value, 0, 1000, 0, 255);
-  Serial.println(brightness);
+  //Serial.println(brightness);
 
   pixels.setBrightness(brightness);
   pixels.show();
 }
 
-void setColor() {
+void setColor(String inString) {
+  int hue = 0;
+  float value = inString.toFloat();
+  hue = value * 65536;
   for (int i = 0; i < NUMPIXELS; i++) {
     // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-    pixels.setPixelColor(i, pixels.Color(0,255,0); // Moderately bright green color.
-    pixels.show(); // This sends the updated pixel color to the hardware.
+    pixels.setPixelColor(i, pixels.ColorHSV(hue); // Moderately bright green color.
+                         pixels.show(); // This sends the updated pixel color to the hardware.
+  }
+}
+
+void setColorStart() {
+  for (int i = 0; i < NUMPIXELS; i++) {
+    // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
+    pixels.setPixelColor(i, pixels.Color(0, 255, 0); // Moderately bright green color.
+                         pixels.show(); // This sends the updated pixel color to the hardware.
   }
 }
 
