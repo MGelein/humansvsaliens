@@ -1,5 +1,5 @@
 var http = require('http');
-var value = 1;
+var value = 0.3;
 
 http.createServer(function (req, res) {
   res.write(String(value)); //write a response to the client

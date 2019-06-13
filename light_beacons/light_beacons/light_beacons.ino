@@ -15,7 +15,7 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 //const char* password = "ik54j3s94rgq";
 
 const char* ssid = "wlan 3";
-const char* password = "Liacs_8_";
+const char* password = "liacs_8_";
 
 int buildinLed = 2;
 
@@ -40,7 +40,7 @@ void loop() {
 
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
     HTTPClient http;  //Declare an object of class HTTPClient
-    http.begin("http://192.168.178.47:1337");  //Specify request destination
+    http.begin("http://132.229.130.188:1337");  //Specify request destination
     int httpCode = http.GET();                                                                  //Send the request
 
     if (httpCode > 0) { //Check the returning code
@@ -67,7 +67,7 @@ void setBright(String inString) {
 void setColor() {
   for (int i = 0; i < NUMPIXELS; i++) {
     // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-    pixels.setPixelColor(i, pixels.Color(0,255,0); // Moderately bright green color.
+    pixels.setPixelColor(i, pixels.Color(0,255,0)); // Moderately bright green color.
     pixels.show(); // This sends the updated pixel color to the hardware.
   }
 }
