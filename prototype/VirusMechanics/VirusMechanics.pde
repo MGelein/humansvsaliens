@@ -3,6 +3,7 @@ final float INC = 0.01;//Increase or decrease of lifeforce
 final float NOISE_A = .6;
 final float SPREAD_CTRL = 1.2f;
 final color bgColor = color(0);
+//final color virusColor = color(255, 50, 0);
 final color virusColor = color(0, 255, 255);
 PImage banner;
 
@@ -12,20 +13,15 @@ float heartBeatAngle = 0;
 float heartBeatSpeed = 0.1;
 float heartBeat = 0;
 float offNoise = 0;
-long startTime = -1;
 
 void setup() {
-  size(1280, 360, P2D);
+  size(1280, 512, P3D);
   cells = new float[width / RESOLUTION][height / RESOLUTION];
   bombs = new float[width / RESOLUTION][height / RESOLUTION];
-  banner = loadImage("banner.jpg");
-  banner.loadPixels();
-  
+
   for (int x = 0; x < cells.length; x++) {
     for (int y = 0; y < cells[0].length; y++) {
-      color c = banner.pixels[x + y * banner.width];
-      cells[x][y] = map(brightness(c), 0, 255, 0, 1);
-      //cells[x][y] = x < 1 ? random(.5) : 0;
+      cells[x][y] = x < 1 ? random(.5) : 0;
       bombs[x][y] = 0;
     }
   }
@@ -34,7 +30,6 @@ void setup() {
 }
 
 void draw() {
-  if(startTime < 0) startTime = millis();
   //Handle the heartBeat
   heartBeatAngle += heartBeatSpeed;
   heartBeat = sin(heartBeatAngle) * .1 + .1;
@@ -60,34 +55,31 @@ void draw() {
     }
   }
 
-  //Check them and spread them
-  if (millis() - startTime > 2000) {
-    for (int x = 0; x < cells.length; x++) {
-      for (int y = 0; y < cells[0].length; y++) {
-        float myVal = getC(x, y) - getB(x, y);
-        float leftVal = getC(x - 1, y);
-        if (leftVal < 0.01) setC(x - 1, y, myVal / SPREAD_CTRL);
-        float rightVal = getC(x + 1, y);
-        if (rightVal < 0.01) setC(x + 1, y, myVal / SPREAD_CTRL);
-        float upVal = getC(x, y - 1);
-        if (upVal < 0.01) setC(x, y - 1, myVal / SPREAD_CTRL);
-        float downVal = getC(x, y + 1);
-        if (downVal < 0.01) setC(x, y + 1, myVal / SPREAD_CTRL);
-        float avg = (myVal + leftVal + rightVal + upVal + downVal) / 5;
-        if (avg >= 1) {//If we're surrounded by only life cells
-          myVal -= .05;//Die a little bit
-        }
-        myVal += (avg - myVal) * random(0.1); //Move a little bit towards the avg
-        //If we're strong (>.5) increase lifeforce
-        //If we're weak (<.5) decrease lifeforce
-        myVal += (myVal > .2) ? INC : -INC;
-        myVal = constrain(myVal, -1, 2);
-        setC(x, y, myVal);
-
-        //Always decrease the bomb values back to 0
-        float val = getB(x, y);
-        setB(x, y, val * 0.95);
+  for (int x = 0; x < cells.length; x++) {
+    for (int y = 0; y < cells[0].length; y++) {
+      float myVal = getC(x, y) - getB(x, y);
+      float leftVal = getC(x - 1, y);
+      if (leftVal < 0.01) setC(x - 1, y, myVal / SPREAD_CTRL);
+      float rightVal = getC(x + 1, y);
+      if (rightVal < 0.01) setC(x + 1, y, myVal / SPREAD_CTRL);
+      float upVal = getC(x, y - 1);
+      if (upVal < 0.01) setC(x, y - 1, myVal / SPREAD_CTRL);
+      float downVal = getC(x, y + 1);
+      if (downVal < 0.01) setC(x, y + 1, myVal / SPREAD_CTRL);
+      float avg = (myVal + leftVal + rightVal + upVal + downVal) / 5;
+      if (avg >= 1) {//If we're surrounded by only life cells
+        myVal -= .05;//Die a little bit
       }
+      myVal += (avg - myVal) * random(0.1); //Move a little bit towards the avg
+      //If we're strong (>.5) increase lifeforce
+      //If we're weak (<.5) decrease lifeforce
+      myVal += (myVal > .2) ? INC : -INC;
+      myVal = constrain(myVal, -1, 2);
+      setC(x, y, myVal);
+
+      //Always decrease the bomb values back to 0
+      float val = getB(x, y);
+      setB(x, y, val * 0.95);
     }
   }
 }
