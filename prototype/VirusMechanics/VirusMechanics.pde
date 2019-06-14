@@ -1,3 +1,5 @@
+import processing.net.*;
+
 final int RESOLUTION = 4;//Size of each 'pixel', only use PO2 values
 final float INC = 0.01;//Increase or decrease of lifeforce
 final float NOISE_A = .6;
@@ -14,6 +16,8 @@ float heartBeatSpeed = 0.1;
 float heartBeat = 0;
 float offNoise = 0;
 
+Ship ship;
+
 void setup() {
   size(1280, 512, P3D);
   cells = new float[width / RESOLUTION][height / RESOLUTION];
@@ -25,8 +29,11 @@ void setup() {
       bombs[x][y] = 0;
     }
   }
+  
+  ship = new Ship();
 
   blendMode(ADD);
+  noSmooth();
 }
 
 void draw() {
@@ -34,6 +41,7 @@ void draw() {
   heartBeatAngle += heartBeatSpeed;
   heartBeat = sin(heartBeatAngle) * .1 + .1;
   offNoise -= heartBeatSpeed;
+  ship.update();
 
   background(0);
   noStroke();
@@ -82,6 +90,8 @@ void draw() {
       setB(x, y, val * 0.95);
     }
   }
+  
+  ship.render();
 }
 
 float getB(int x, int y) {
