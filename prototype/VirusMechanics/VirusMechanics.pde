@@ -42,6 +42,7 @@ void draw() {
   heartBeat = sin(heartBeatAngle) * .1 + .1;
   offNoise -= heartBeatSpeed;
   ship.update();
+  bulletManager.update();
 
   background(0);
   noStroke();
@@ -92,6 +93,7 @@ void draw() {
   }
   
   ship.render();
+  bulletManager.render();
 }
 
 float getB(int x, int y) {
@@ -126,4 +128,13 @@ void mousePressed() {
       setB(x, y, 1);
     }
   }
+}
+
+
+void keyPressed(){
+  Key.setState(keyCode, true);
+}
+
+void keyReleased(){
+  Key.setState(keyCode, false);
 }

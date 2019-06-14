@@ -3,6 +3,9 @@ class Ship{
   float vel = 0;
   float force = 2;
   float buffer = 30;
+  float xOff = 0;
+  int cooldown = 0;
+  final int shootCooldown = 10;
   color shipColor = color(125, 125, 255);
   
   Ship(){
@@ -11,6 +14,7 @@ class Ship{
   }
   
   void update(){
+    cooldown --;
     y += vel;
     if(Key.isDown(UP)){
       vel -= force;
@@ -18,7 +22,13 @@ class Ship{
     if(Key.isDown(DOWN)){
       vel += force;
     }
+    if(Key.isDown(32)){//SPACE
+      if(cooldown <= 0){
+        shoot();
+      }
+    }
     vel *= 0.9;
+    xOff *= 0.8;
     
     float newY = constrain(y, buffer, height - buffer);
     if(y != newY) {
@@ -27,12 +37,18 @@ class Ship{
     }
   }
   
+  void shoot(){
+    bulletManager.bullets.add(new Bullet(this));
+    cooldown = shootCooldown;
+    xOff = 10;
+  }
+  
   void render(){
     fill(shipColor);
     strokeWeight(RESOLUTION);
     stroke(255);
     pushMatrix();
-    translate(width - buffer, y);
+    translate(width - buffer + xOff, y);
     beginShape();
     float b = buffer * .5;
     vertex(-b, 0);
@@ -41,12 +57,4 @@ class Ship{
     endShape(CLOSE);
     popMatrix();
   }
-}
-
-void keyPressed(){
-  Key.setState(keyCode, true);
-}
-
-void keyReleased(){
-  Key.setState(keyCode, false);
 }
