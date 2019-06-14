@@ -17,13 +17,14 @@ class BulletManager {
 }
 
 class Bullet {
-  final float size = 10;
-  final float virusThreshold = 0.01;
+  final float virusThreshold = 0.1;
   final color bulletColor = color(0, 125, 255);
   PVector pos;
+  float power = 0;
   final PVector shootForce = new PVector(-30, 0);
 
-  Bullet(Ship s) {
+  Bullet(Ship s, float str) {
+    power = str;
     pos = new PVector(width - s.buffer, s.y);
   }
 
@@ -42,6 +43,7 @@ class Bullet {
   }
 
   void explode() {
+    addExplosion(pos, (int) power);
     //Remove me now
     bulletManager.bullets.rem(this);
   }
@@ -52,7 +54,7 @@ class Bullet {
     fill(bulletColor);
     stroke(255);
     strokeWeight(RESOLUTION);
-    circle(0, 0, size);
+    circle(0, 0, power);
     popMatrix();
   }
 }

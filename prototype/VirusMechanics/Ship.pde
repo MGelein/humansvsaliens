@@ -1,11 +1,11 @@
 class Ship{
+  final float MAX_BULLET_SIZE = 50;
   float y = 0;
   float vel = 0;
   float force = 2;
   float buffer = 30;
   float xOff = 0;
-  int cooldown = 0;
-  final int shootCooldown = 10;
+  float chargeUp = 0;
   color shipColor = color(125, 125, 255);
   
   Ship(){
@@ -14,7 +14,6 @@ class Ship{
   }
   
   void update(){
-    cooldown --;
     y += vel;
     if(Key.isDown(UP)){
       vel -= force;
@@ -23,7 +22,13 @@ class Ship{
       vel += force;
     }
     if(Key.isDown(32)){//SPACE
-      if(cooldown <= 0){
+      chargeUp += (MAX_BULLET_SIZE - chargeUp) * 0.01;
+      if(chargeUp >= MAX_BULLET_SIZE) {
+        shoot();
+        Key.setState(32, false);//Unpress the spacebar
+      }
+    }else{
+      if(chargeUp > 0){
         shoot();
       }
     }
@@ -38,9 +43,9 @@ class Ship{
   }
   
   void shoot(){
-    bulletManager.bullets.add(new Bullet(this));
-    cooldown = shootCooldown;
-    xOff = 10;
+    bulletManager.bullets.add(new Bullet(this, chargeUp));
+    xOff = chargeUp * .1;
+    chargeUp = 0;
   }
   
   void render(){
@@ -56,5 +61,9 @@ class Ship{
     vertex(b, b);
     endShape(CLOSE);
     popMatrix();
+    
+    //Draw the charge meter
+    noStroke();
+    rect(width - RESOLUTION, height, RESOLUTION, map(chargeUp, 0, MAX_BULLET_SIZE, 0, -height));
   }
 }

@@ -43,6 +43,9 @@ void draw() {
   virusRender();
   ship.render();
   bulletManager.render();
+    
+  //Uncomment to show the debug 'bomb' overlay
+  //image(bombGraphics, 0, 0, width, height);
 }
 
 void keyPressed() {
