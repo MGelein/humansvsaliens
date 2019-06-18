@@ -1,7 +1,25 @@
 var http = require('http');
-var value = 0.3;
+var index = 0;
+var hue = 0.3;
+var saturation = 1;
+var brightness = 1;
 
 http.createServer(function (req, res) {
-  res.write(String(value)); //write a response to the client
-  res.end(); //end the response
-}).listen(1337); //the server object listens on port 8080
+  res.write(String(hue));
+  res.end();
+}).listen(1000);
+
+http.createServer(function (req, res) {
+  res.write(String(hue));
+  res.end();
+}).listen(1001);
+
+http.createServer(function (req, res) {
+  res.write(String(saturation));
+  res.end();
+}).listen(1002);
+
+http.createServer(function (req, res) {
+  res.write(String(brightness));
+  res.end();
+}).listen(1003); 

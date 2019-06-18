@@ -14,8 +14,8 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 //const char* ssid = "Dollard_2.4GHz";
 //const char* password = "ik54j3s94rgq";
 
-const char* ssid = "wlan 3";
-const char* password = "liacs_8_";
+const char* ssid = "interwebs";
+const char* password = "Wachtwoord";
 
 int buildinLed = 2;
 
@@ -40,7 +40,7 @@ void loop() {
 
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
     HTTPClient http;  //Declare an object of class HTTPClient
-    http.begin("http://132.229.130.188:1337");  //Specify request destination
+    http.begin("http://192.168.43.67:1337");  //Specify request destination
     int httpCode = http.GET();                                                                  //Send the request
 
     if (httpCode > 0) { //Check the returning code
@@ -49,7 +49,7 @@ void loop() {
     }
     http.end();   //Close connection
   }
-  delay(1000);    //Send a request every 3 seconds
+  delay(100);    //Send a request every 3 seconds
 }
 
 void setBright(String inString) {
