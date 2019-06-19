@@ -1,0 +1,8 @@
+*.ts
+frames
+.vscode
+.DS_Store
+etc
+__pycache__
+out
+data/weights/*

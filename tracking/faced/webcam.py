@@ -14,8 +14,8 @@ max_y = 200 # max distance at which we detect people (based on the actual_face_s
 print_fps = True # print FPS to stdout
 show_webcam = True
 show_map = True # show a map of the people in window while running
-map_width = 640
-map_height = 480
+map_width = 400
+map_height = 400
 
 face_detector = FaceDetector()
 video_capture = cv2.VideoCapture(webcam_index)
@@ -50,7 +50,8 @@ while True:
     
     if show_webcam:
         ann_frame = annotate_image(frame, bboxes)
-        cv2.imshow('annotated_webcam', ann_frame)
+        frame = cv2.resize(ann_frame, (640, 480)) / 255.
+        cv2.imshow('annotated_webcam', frame)
     
     if print_fps:
         fps = (fps + (1. / (time.time() - t1))) / 2
