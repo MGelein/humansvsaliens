@@ -3,6 +3,7 @@ import numpy as np
 from timeit import time
 import math
 import torch
+import requests
 
 from imutils.video import FPS, WebcamVideoStream
 
@@ -16,8 +17,8 @@ max_x = 640 # basically the webcam frame width
 max_y = 200 # max distance at which we detect people (based on the actual_face_size)
 
 print_fps = True # print FPS to stdout
-show_webcam = True
-show_map = True # show a map of the people in window while running
+show_webcam = False
+show_map = False # show a map of the people in window while running
 map_width = 400
 map_height = 400
 
@@ -37,12 +38,18 @@ def predict(frame):
 
     # 15 is the index of the person class in the VOC label map
     person_class_idx = 15
+    data = {}
     j = 0
     while detections[0, person_class_idx, j, 0] >= THRESHOLD:
         pt = (detections[0, person_class_idx, j, 1:] * scale).cpu().numpy()
+        data[j] = pt
+
         cv2.rectangle(frame, (int(pt[0]), int(pt[1])), (int(pt[2]), int(pt[3])), (255, 128, 0), 1)
         cv2.putText(frame, str((detections[0, person_class_idx, j, 0]).cpu().numpy()), (int(pt[0]), int(pt[1])), FONT, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         j += 1
+
+    requests.put("http://localhost:3000/people", data=data)
+
     return frame
     
 net = build_ssd('test', 300, 21)    # initialize SSD
@@ -59,10 +66,10 @@ while True:
 
     t1 = time.time()
 
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     # bboxes = face_detector.predict(rgb_frame, thresh)
-    ann_frame = predict(rgb_frame)
+    ann_frame = predict(frame)
 
     bg = np.zeros((map_height, map_width, 3))
     

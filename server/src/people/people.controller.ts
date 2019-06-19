@@ -12,7 +12,12 @@ export class PeopleController {
   
   @Put()
   update(@Body() body: any) {
-    console.log(body)
+    const newPeople = Object.keys(body).reduce((people: Person[], key: string) => {
+      people.push(({ id: Number(key), x: body[key][0], y: body[key][1], w: body[key][2], h: body[key][3] }))
+      return people
+    }, [])
+    
+    this.peopleService.update(newPeople)
 
     return true
   }
