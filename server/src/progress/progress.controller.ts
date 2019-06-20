@@ -12,6 +12,8 @@ export class ProgressController {
 
   @Put()
   update(@Body() body: string): boolean {
+    console.log(body)
+    console.log(parseFloat(body))
     return this.progressService.set(parseFloat(body))
   }
 

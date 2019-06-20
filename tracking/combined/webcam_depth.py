@@ -20,7 +20,6 @@ import torch
 from torchvision import transforms, datasets
 
 import networks
-from layers import disp_to_depth
 from utils import download_model_if_doesnt_exist
 
 webcam_index = 0 # 0 for built-in webcam, 1 for external webcam (generally)
