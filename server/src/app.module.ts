@@ -9,9 +9,12 @@ import { PeopleService } from './people/people.service'
 
 import { GameModule } from './game.module';
 
+import { ProgressController } from './progress/progress.controller';
+import { ProgressService } from './progress/progress.service';
+
 @Module({
   imports: [GameModule],
-  controllers: [AppController, LightsController, PeopleController],
-  providers: [LightsService, PeopleService],
+  controllers: [AppController, LightsController, PeopleController, ProgressController],
+  providers: [LightsService, PeopleService, ProgressService],
 })
 export class AppModule {}
