@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common'
+import { Controller, Get, Put, Body, Header } from '@nestjs/common'
 import { PeopleService, Person } from './people.service'
 
 @Controller('people')
@@ -8,6 +8,12 @@ export class PeopleController {
   @Get()
   list(): Person[] {
     return this.peopleService.list()
+  }
+
+  @Get('csv')
+  @Header('Content-Type', 'text/plain')
+  csv(): string {
+    return this.peopleService.list().map((person: Person) => Object.keys(person).map((key: string) => person[key]).join(',')).join('\n')
   }
   
   @Put()
