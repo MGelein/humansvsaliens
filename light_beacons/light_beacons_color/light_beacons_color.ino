@@ -19,6 +19,9 @@ const char* password = "Wachtwoord";
 
 int buildinLed = 2;
 
+int lightIndex = 0;
+
+int light = 0;
 int hue = 65536;
 int saturation = 255;
 int brightness = 255;
@@ -27,9 +30,7 @@ int currentHue = 65536;
 int currentSaturation = 255;
 int currentBrightness = 255;
 
-float data[2];
-
-String payload1, payload2, payload3;
+String payload1, payload2, payload3, payload4;
 
 void setup () {
   pinMode(buildinLed, OUTPUT);
@@ -51,31 +52,40 @@ void setup () {
 void loop() {
 
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
-    HTTPClient http1, http2, http3;  //Declare an object of class HTTPClient
-    http1.begin("http://192.168.43.67:1001");
-    http2.begin("http://192.168.43.67:1002");
-    http3.begin("http://192.168.43.67:1003");
-    int httpCode1 = http1.GET();
-    int httpCode2 = http2.GET();
-    int httpCode3 = http3.GET();
+    HTTPClient httpL, httpH, httpS, httpB;  //Declare an object of class HTTPClient
+    httpL.begin("http://192.168.43.67:1000");
+    httpH.begin("http://192.168.43.67:1001");
+    httpS.begin("http://192.168.43.67:1002");
+    httpB.begin("http://192.168.43.67:1003");
+    int httpCode1 = httpL.GET();
+    int httpCode2 = httpH.GET();
+    int httpCode3 = httpS.GET();
+    int httpCode4 = httpB.GET();
     if (httpCode1 > 0) {
-      payload1 = http1.getString();
+      payload1 = httpL.getString();
     }
     if (httpCode2 > 0) {
-      payload2 = http2.getString();
+      payload2 = httpH.getString();
     }
     if (httpCode3 > 0) {
-      payload3 = http3.getString();
+      payload3 = httpS.getString();
     }
-    http1.end();
-    http2.end();
-    http3.end();
+    if (httpCode3 > 0) {
+      payload4 = httpB.getString();
+    }
+    httpL.end();
+    httpH.end();
+    httpS.end();
+    httpB.end();
   }
-  setColor(payload1, payload2, payload3);
+  light = payload1.toFloat();
+  if (light == lightIndex) {
+    setColor(payload2, payload3, payload4);
+  }
   delay(10);
 }
 
-void setColor(String inString1, String inString2, String inString3) {
+void setColor(String inString2, String inString3, String inString4) {
   //  char charBuffer[100];
   //  inString.toCharArray(charBuffer, 100);
   //  char* comma;
@@ -94,10 +104,9 @@ void setColor(String inString1, String inString2, String inString3) {
   //    Serial.print("\t");
   //    Serial.println(data[2]);
 
-
-  hue = inString1.toFloat() * 65536;
-  saturation = inString2.toFloat() * 255;
-  brightness = inString3.toFloat() * 255;
+  hue = inString2.toFloat() * 65536;
+  saturation = inString3.toFloat() * 255;
+  brightness = inString4.toFloat() * 255;
   //  hue = inHue * 65536;
   //  saturation = inSaturation * 255;
   //  brightness = inBrightness * 255;
@@ -113,6 +122,8 @@ void setColor(String inString1, String inString2, String inString3) {
   Serial.print(payload2);
   Serial.print("\t");
   Serial.print(payload3);
+  Serial.print("\t");
+  Serial.print(payload4);
   Serial.print("\t");
 
   Serial.print(currentHue);

@@ -3,7 +3,7 @@ import numpy as np
 from timeit import time
 import math
 import torch
-import requests
+#import requests
 
 from imutils.video import FPS, WebcamVideoStream
 
@@ -17,7 +17,7 @@ max_x = 640 # basically the webcam frame width
 max_y = 200 # max distance at which we detect people (based on the actual_face_size)
 
 print_fps = True # print FPS to stdout
-show_webcam = False
+show_webcam = True
 show_map = False # show a map of the people in window while running
 map_width = 400
 map_height = 400
@@ -48,10 +48,10 @@ def predict(frame):
         cv2.putText(frame, str((detections[0, person_class_idx, j, 0]).cpu().numpy()), (int(pt[0]), int(pt[1])), FONT, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
         j += 1
 
-    requests.put("http://localhost:3000/people", data=data)
+    #requests.put("http://localhost:3000/people", data=data)
 
     return frame
-    
+
 net = build_ssd('test', 300, 21)    # initialize SSD
 net.load_state_dict(torch.load('data/weights/ssd_300_VOC0712.pth'))
 transform = BaseTransform(net.size, (104/256.0, 117/256.0, 123/256.0))
@@ -72,7 +72,7 @@ while True:
     ann_frame = predict(frame)
 
     bg = np.zeros((map_height, map_width, 3))
-    
+
     # for box in bboxes:
     #     actual_face_size = math.sqrt(box[2] * box[3]) # use area of the face size as a measure of distance
     #     distance = max_face_size - actual_face_size # closest faces should be lowest values
@@ -85,12 +85,12 @@ while True:
 
     if show_map:
         cv2.imshow('map', bg)
-    
+
     if show_webcam:
         # ann_frame = annotate_image(frame, bboxes)
         frame = cv2.resize(ann_frame, (640, 480)) / 255.
         cv2.imshow('annotated_webcam', frame)
-    
+
     if print_fps:
         fps = (fps + (1. / (time.time() - t1))) / 2
         print("fps = %f"%(fps))
