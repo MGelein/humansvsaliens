@@ -17,7 +17,7 @@ max_x = 640 # basically the webcam frame width
 max_y = 200 # max distance at which we detect people (based on the actual_face_size)
 
 print_fps = True # print FPS to stdout
-show_webcam = False
+show_webcam = True
 show_map = False # show a map of the people in window while running
 map_width = 400
 map_height = 400
