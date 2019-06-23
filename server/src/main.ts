@@ -7,9 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   // Dummy data
-  app.get('LightsService').set(1, 0.3)
-  app.get('LightsService').set(2, 0.4)
-  app.get('LightsService').set(3, 0.5)
+  app.get('LightsService').set(1, 0.1)
+  app.get('LightsService').set(2, 0.5)
+  app.get('LightsService').set(3, 1.0)
   app.get('LightsService').set(4, 0.6)
   app.get('LightsService').set(5, 0.7)
   app.get('PeopleService').update([
