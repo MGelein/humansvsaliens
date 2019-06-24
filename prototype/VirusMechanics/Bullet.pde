@@ -21,11 +21,11 @@ class Bullet {
   final color bulletColor = color(0, 125, 255);
   PVector pos;
   float power = 0;
-  final PVector shootForce = new PVector(-30, 0);
+  final PVector shootForce = new PVector(0, -30);
 
   Bullet(Ship s, float str) {
     power = str;
-    pos = new PVector(width - s.buffer, s.y);
+    pos = new PVector(s.x, height - s.buffer);
   }
 
   void update() {
