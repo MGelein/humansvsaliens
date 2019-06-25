@@ -4,3 +4,4 @@ __pycache__
 *.avi
 tracking/deep_sort_yolov3
 tracking/3net
+server/dist
