@@ -12,6 +12,8 @@ class Virus extends RenderObj implements IUpdate {
   final color COL_VR = color(0, 255, 255);
   //The color of the heartbeat
   final color COL_WH = color(200, 200, 255);
+  //The color that signifies all is good
+  final color COL_GOOD = color(0, 255, 100);
   //The size of the playing field
   final int W = (int) game.dim.x / 3;
   final int H = (int) game.dim.y;
