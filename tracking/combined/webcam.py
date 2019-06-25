@@ -134,7 +134,7 @@ with torch.no_grad():
             data[j] = pt
 
             #requests.put("http://localhost:3000/people", data=data)
-            distance = depth_map[int(pt[1])][int(pt[0])] # closest faces should be lowest values
+            distance = depth_map[int(pt[0])][int(pt[j])] # closest faces should be lowest values
 
             cv2.rectangle(input_image, (int(pt[0]), int(pt[1])), (int(pt[2]), int(pt[3])), (255, 128, 0), 1)
             cv2.putText(input_image, str(distance), (int(pt[0]), int(pt[1])), FONT, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
