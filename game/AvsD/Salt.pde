@@ -9,7 +9,8 @@ class Salt extends RenderObj implements IUpdate {
   void init() {
     depth = 1;
     g = createGraphics(virus.W, virus.H, P2D);
-    g.noSmooth();
+    g.hint(DISABLE_TEXTURE_MIPMAPS);
+    ((PGraphicsOpenGL)g).textureSampling(2);
     g.beginDraw();
     g.endDraw();
     game.updateList.add(this);
@@ -18,7 +19,7 @@ class Salt extends RenderObj implements IUpdate {
   
   //Renders the salt layer on top of the virus
   void render(PGraphics g){
-    g.image(this.g, 0, 0);
+    //g.image(this.g, 0, 0);
   }
 
   //Updates this layer

@@ -15,6 +15,7 @@ class Virus extends RenderObj implements IUpdate {
   //The size of the playing field
   final int W = (int) game.dim.x / 3;
   final int H = (int) game.dim.y;
+  float percentage = 0;
   final color[] COL_CACHE = getColCache();
 
   //All the cells of the playing field that the virus can populate
@@ -56,6 +57,7 @@ class Virus extends RenderObj implements IUpdate {
     offNoise -= hbSpeed;
 
     salt.g.loadPixels();
+    int virusPixels = 0;
     for (int x = 0; x < cells.length; x++) {
       for (int y = 0; y < cells[0].length; y++) {
         float myVal = getC(x, y) - salt.getB(x, y);
@@ -75,8 +77,10 @@ class Virus extends RenderObj implements IUpdate {
         myVal += (myVal > .2) ? INC : -INC;
         myVal = constrain(myVal, -1, 2);
         setC(x, y, myVal);
+        if(myVal > .1) virusPixels ++;
       }
     }
+    percentage = (virusPixels / (W * H * 1.0f));
     salt.g.updatePixels();
   }
 
@@ -97,7 +101,7 @@ class Virus extends RenderObj implements IUpdate {
   //Renders the virus to the canvas
   void render(PGraphics g) {
     g.pushMatrix();
-    g.translate(W, 0);
+    g.translate(32, 0);
     g.noFill();
     g.stroke(COL_VR);
     g.rect(-1, -1, W + 1, H + 2);
@@ -113,7 +117,7 @@ class Virus extends RenderObj implements IUpdate {
         if (virus < .1) virus -= hb;
         else virus += hb;
 
-        pxi = x + W + y * (int) game.dim.x;
+        pxi = x + 32 + y * (int) game.dim.x;
         c = virus > 0.1 ? lerpColor(getColor(virus), COL_WH, hb) : getColor(virus);
         g.pixels[pxi] = c;
       }

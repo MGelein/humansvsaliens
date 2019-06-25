@@ -10,8 +10,10 @@ final GUI gui = new GUI();
 //Handles the initialization of the game
 void setup(){
   //Set the current window size. For testing, otherwise fullscreen
-  fullScreen(P2D);
-  //size(960, 540, P2D);
+  //fullScreen(P2D);
+  size(960, 540, P2D);
+  hint(DISABLE_TEXTURE_MIPMAPS);
+  ((PGraphicsOpenGL)g).textureSampling(2);
   //Initialize the game, start loading assets, etc
   game.init();
   //Don't do any smoothing to textures
