@@ -19,7 +19,7 @@ class Network implements IUpdate{
   
   //Posts the progress
   void postProgress(){
-    loadStrings("http://localhost:3000/");
+    loadStrings("http://localhost:3000/progress/" + virus.percentage);
   }
   
   //Updates the people
