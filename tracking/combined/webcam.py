@@ -18,7 +18,7 @@ from utils import download_model_if_doesnt_exist
 from timeit import time
 import math
 import torch
-#import requests
+import requests
 
 from imutils.video import FPS, WebcamVideoStream
 
@@ -133,8 +133,12 @@ with torch.no_grad():
             pt = (bboxes[0, person_class_idx, j, 1:] * scale).cpu().numpy()
             data[j] = pt
 
-            #requests.put("http://localhost:3000/people", data=data)
-            distance = depth_map[int(pt[0])][int(pt[j])] # closest faces should be lowest values
+            try:
+                requests.put("http://localhost:3000/people", data=data)
+            except requests.exceptions.RequestException as e:
+                print('Failed to send people data to the webserver')
+
+            distance = depth_map[int(pt[1])][int(pt[0])] # closest faces should be lowest values
 
             cv2.rectangle(input_image, (int(pt[0]), int(pt[1])), (int(pt[2]), int(pt[3])), (255, 128, 0), 1)
             cv2.putText(input_image, str(distance), (int(pt[0]), int(pt[1])), FONT, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
