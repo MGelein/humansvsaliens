@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common'
 
+import { CacheService } from '../cache.service'
+
 @Injectable()
 export class ProgressService {
+
+  constructor(private readonly cacheService: CacheService) {}
 
   progress: number = 0.2
 

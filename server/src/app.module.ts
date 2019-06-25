@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common'
+import * as fsStore from 'cache-manager-fs';
+import { CacheModule, Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 
 import { LightsController } from './lights/lights.controller'
@@ -12,9 +13,19 @@ import { GameModule } from './game.module';
 import { ProgressController } from './progress/progress.controller';
 import { ProgressService } from './progress/progress.service';
 
+import { CacheService } from './cache.service';
+
 @Module({
-  imports: [GameModule],
+  imports: [GameModule, CacheModule.register({
+    store: fsStore,
+    options: {
+      ttl: 60*60*24*30 /* seconds */,
+      maxsize: 1000*1000*1000 /* max size in bytes on disk */,
+      path: 'storage',
+      preventfill: true
+    }
+  })],
   controllers: [AppController, LightsController, PeopleController, ProgressController],
-  providers: [PeopleService, ProgressService, LightsService],
+  providers: [CacheService, PeopleService, ProgressService, LightsService],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common'
+import { Controller, Get, Post, Param, Body } from '@nestjs/common'
 import { ProgressService } from './progress.service'
 
 @Controller('progress')
@@ -8,6 +8,11 @@ export class ProgressController {
   @Get()
   get(): number {
     return this.progressService.get()
+  }
+
+  @Get(':progress')
+  set(@Param('progress') progress): boolean {
+    return this.progressService.set(Number(progress))
   }
 
   @Post()
