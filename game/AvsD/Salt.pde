@@ -18,9 +18,9 @@ class Salt extends RenderObj implements IUpdate {
     game.updateList.add(this);
     game.renderList.add(this);
   }
-  
+
   //Renders the salt layer on top of the virus
-  void render(PGraphics g){
+  void render(PGraphics g) {
     //g.image(this.g, 0, 0);
   }
 
@@ -36,11 +36,11 @@ class Salt extends RenderObj implements IUpdate {
       e.update();
       e.render(g);
     }
-    for(Person p: people.list){
+    for (Person p : people.list) {
       p.update();
       p.render(g);
     }
-    
+
     g.endDraw();
   }
 
@@ -58,30 +58,68 @@ class Salt extends RenderObj implements IUpdate {
       circles.add(new ExpCircle(pos, i, t / 5, size));
     }
   }
-  
+
   //Adds a person dot to the display
-  void addPeople(ArrayList<PVector> places){
-    people.list.clear();
-     for(int i = 0; i < places.size(); i++){
-       people.add(new Person(places.get(i)));
-     }
+  void addPeople(ArrayList<PVector> places) {
+    for(Person p : people.list){
+      p.updated = false;
+    }
+    
+    //Try to find a match for all the places
+    for(PVector place: places){
+      Person match = getClosestPerson(place);
+      if(match == null) {
+        match = new Person(place);
+        people.add(match);
+      }
+      match.setTarget(place);
+    }
+    
+    
+    //Remove any unupdated person
+    for(Person p : people.list){
+      if(!p.updated) people.rem(p);
+    }
+  }
+
+  //Finds the closest match to the provided position
+  Person getClosestPerson(PVector pos) {
+    Person record = null;
+    float recordDist = 1234567890;
+    for (Person p : people.list) {
+      if (p.updated) continue;
+      float dist = dist(p.pos.x, p.pos.y, pos.x, pos.y);
+      if (dist < recordDist) {
+        recordDist = dist;
+        record = p;
+      }
+    }
+    if (record != null) record.updated = true;
+    return record;
   }
 }
 
 //A single person
-class Person extends RenderObj implements IUpdate{
+class Person extends RenderObj implements IUpdate {
   PVector pos;
   PVector tPos;
-  
-  Person(PVector place){
+  boolean updated = false;
+
+  Person(PVector place) {
     pos = new PVector(place.x * virus.W, place.y * virus.H);
   }
-  
-  void update(){
-    
+
+  void update() {
+    PVector diff = PVector.sub(tPos, pos);
+    pos.add(diff.mult(0.1));
   }
   
-  void render(PGraphics g){
+  //Sets the target to ease towards
+  void setTarget(PVector target){
+    tPos = target.copy();
+  }
+
+  void render(PGraphics g) {
     g.fill(255);
     g.circle(pos.x, pos.y, 10);
   }

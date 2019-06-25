@@ -5,7 +5,7 @@ class Network implements IUpdate{
   //The amount of frames that have passed
   int frames = 0;
   
-  //Initializing the network
+  //Initializing the n  etwork
   Network(){
     game.updateList.add(this);
   }
@@ -16,6 +16,8 @@ class Network implements IUpdate{
     if(frames % PEOPLE_INTERVAL == 0) getPeople();
     if(frames % PROGRESS_INTERVAL == 0) postProgress();
   }
+  
+  // score/USER/VAL
   
   //Posts the progress
   void postProgress(){
