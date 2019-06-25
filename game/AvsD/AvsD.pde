@@ -7,6 +7,10 @@ final Virus virus = new Virus();
 final Salt salt = new Salt();
 final GUI gui = new GUI();
 final Network network = new Network();
+final Ship ship = new Ship();
+
+//Add the keycode for the spacebar
+final int SPACE = 32;
 
 //Handles the initialization of the game
 void setup(){

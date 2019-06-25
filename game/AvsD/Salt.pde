@@ -121,7 +121,7 @@ class Person extends RenderObj implements IUpdate {
 
   void render(PGraphics g) {
     g.fill(255);
-    g.circle(pos.x, pos.y, 10);
+    g.circle(pos.x, pos.y, 16);
   }
 }
 
