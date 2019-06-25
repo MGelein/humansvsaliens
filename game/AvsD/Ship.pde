@@ -3,7 +3,7 @@ class Ship extends RenderObj implements IUpdate{
   PVector vel = new PVector();
   final float size = 16;
   final float force = 0.2;
-  final float maxCharge = 20;
+  final float maxCharge = 512;
   boolean charging = false;//If we're charging the shooting mechanism
   float charge = 0;
   
@@ -53,7 +53,8 @@ class Ship extends RenderObj implements IUpdate{
   
   //Shoots a projectile after charging for a bit
   void shoot(){
-    
+    if(charge < 16) charge = 16;
+    game.updateList.add(new Bullet(this, sqrt(charge)));
     //Reset the charge after shooting
     charge = 0;
   }
