@@ -6,6 +6,7 @@ final Game game = new Game();
 final Virus virus = new Virus();
 final Salt salt = new Salt();
 final GUI gui = new GUI();
+final Network network = new Network();
 
 //Handles the initialization of the game
 void setup(){
