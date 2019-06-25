@@ -31,6 +31,28 @@ class GUI extends RenderObj implements IUpdate{
     g.text("Time Left", left + virus.W - 64, yPos);
     g.text(game.timeLeft, left + virus.W - 64, yPos + yInc / 3);
     g.text("Control Points", left, yPos += yInc);
+    drawProgress(left, yPos, g);
     g.text("Current effect", left, yPos += yInc);
+  }
+  
+  //Draw the control point progress thingy
+  void drawProgress(float x, float y, PGraphics g){
+    g.pushMatrix();
+    g.translate(x, y);
+    float inc = 48;
+    float r = 16;
+    g.stroke(virus.COL_VR);
+    g.strokeWeight(1);
+    g.line(r / 2, r, 5 * inc, r);
+    g.strokeWeight(4);
+    println(virus.percentage);
+    g.line(r / 2, r, (5.0f * virus.percentage) * inc, r);
+    g.strokeWeight(1);
+    for(int i = 0; i < 5; i++){
+      g.fill(virus.percentage > (i + .5) * 0.2f ? virus.COL_VR: 0);
+      g.stroke(virus.COL_VR);
+      g.circle((i + .5) * inc + r / 2, r, r);
+    }
+    g.popMatrix();
   }
 }
