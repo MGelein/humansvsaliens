@@ -41,7 +41,7 @@ bool up = false;
 
 unsigned long startMillis;
 unsigned long currentMillis;
-const unsigned long period = 100;
+const unsigned long period = 5;
 
 void setup () {
   pinMode(buildinLed, OUTPUT);
@@ -75,7 +75,7 @@ void loop() {
   setColor(payload);
   updatePixels();
   heartBeat();
-  //  delay(10);
+  delay(100);
 }
 
 //    Sets the color of the pixels
@@ -95,7 +95,7 @@ void setColor(String inString) {
   //  Serial.print("\t");
   //  Serial.println(currentBrightness);
 
-  currentHue = currentHue + (checkPos(currentHue, hue) * 32);
+  currentHue = currentHue + (checkPos(currentHue, hue) * 128);
 }
 
 //    Start color of the pixels
