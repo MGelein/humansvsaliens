@@ -21,27 +21,29 @@ int buildinLed = 2;
 
 int lightIndex = 1;
 
-int heartRate = 1;
-int heartMax = 254;
-int heartMin = 50;
-
-int hue = 49152;
+int hue = 65536;
 int saturation = 255;
-int brightness = 255;
 
-int currentHue = 49152;
+int currentHue = 65536;
 int currentSaturation = 255;
 int currentBrightness = 255;
 
-int flash = 65536;
+int flash = 49152;
+bool overtaken = false;
 
 String payload;
 
 bool up = false;
 
-unsigned long startMillis;
-unsigned long currentMillis;
-const unsigned long period = 5;
+//    Request Timer
+unsigned long reqStartMillis;
+unsigned long reqCurrentMillis;
+const unsigned long reqPeriod = 100;
+
+//    Flash Timer
+unsigned long flashStartMillis;
+unsigned long flashCurrentMillis;
+const unsigned long flashPeriod = 5;
 
 void setup () {
   pinMode(buildinLed, OUTPUT);
@@ -62,26 +64,37 @@ void setup () {
 
 void loop() {
 
-  if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
-    HTTPClient http;  //Declare an object of class HTTPClient
-    http.begin("http://192.168.43.67:3000/lights/" + String(lightIndex));
-    int httpCode = http.GET();
 
-    if (httpCode > 0) {
-      payload = http.getString();
+  if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+    reqCurrentMillis = millis();
+    if (reqCurrentMillis - reqStartMillis >= reqPeriod) {
+      HTTPClient http;  //Declare an object of class HTTPClient
+      http.begin("http://192.168.43.67:3000/lights/" + String(lightIndex));
+      int httpCode = http.GET();
+
+      if (httpCode > 0) {
+        payload = http.getString();
+      }
+      http.end();
+      reqStartMillis = reqCurrentMillis;
+
     }
-    http.end();
+    setColor(payload);
+    updatePixels();
+    overtakeFlash();
+    heartBeat();
+
+    if (overtaken == true && currentHue != flash) {
+      overtaken = false;
+    }
   }
-  setColor(payload);
-  updatePixels();
-  heartBeat();
-  delay(100);
 }
+
 
 //    Sets the color of the pixels
 void setColor(String inString) {
   int temp = inString.toFloat() * 1000;
-  hue = map(temp, 0, 1000, 49152, 65536);
+  hue = map(temp, 0, 1000,  65536, 49152);
 
   //  Serial.print(payload);
   //  Serial.print("\t");
@@ -93,9 +106,17 @@ void setColor(String inString) {
   //  Serial.print("\t");
   //  Serial.print(checkPos(currentHue, hue));
   //  Serial.print("\t");
-  //  Serial.println(currentBrightness);
+  Serial.print(currentBrightness);
+  Serial.print("\t");
+  Serial.print(currentSaturation);
+  Serial.print("\t");
+  Serial.print(saturation);
+  Serial.print("\t");
+  Serial.print(checkPos(currentSaturation, saturation));
+  Serial.print("\t");
+  Serial.println(overtaken);
 
-  currentHue = currentHue + (checkPos(currentHue, hue) * 128);
+  currentHue = currentHue + (checkPos(currentHue, hue) * 32);
 }
 
 //    Start color of the pixels
@@ -108,23 +129,7 @@ void setColorStart() {
 
 //    Production of the heartbeat (pulsing effect)
 void heartBeat() {
-  currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
-  if (currentMillis - startMillis >= period)  //test whether the period has elapsed
-  {
-    if (up == false) {
-      currentBrightness --;
-    }
-    if (up == true) {
-      currentBrightness ++;
-    }
-    if (currentBrightness == heartMin) {
-      up = true;
-    }
-    if (currentBrightness == heartMax) {
-      up = false;
-    }
-    startMillis = currentMillis;  //IMPORTANT to save the start time of the current LED state.
-  }
+  currentBrightness = (sin(millis() / 600.0) * 0.5 + 0.5) * 205 + 50;
 }
 
 
@@ -147,6 +152,24 @@ void updatePixels() {
   for (int i = 0; i < NUMPIXELS; i++) {
     pixels.setPixelColor(i, pixels.ColorHSV(currentHue, currentSaturation, currentBrightness));
     pixels.show();
+  }
+}
+
+void overtakeFlash() {
+  if (currentHue == flash && overtaken == false) {
+    Serial.println("FLASH!!!");
+    currentBrightness = 255;
+    currentSaturation = 0;
+    saturation = 0;
+    overtaken = true;
+  }
+  else {
+    saturation = 255;
+  }
+  flashCurrentMillis = millis();
+  if (flashCurrentMillis - flashStartMillis >= flashPeriod) {
+    currentSaturation = currentSaturation + (checkPos(currentSaturation, saturation));
+    flashStartMillis = flashCurrentMillis;
   }
 }
 

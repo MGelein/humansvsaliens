@@ -131,12 +131,6 @@ with torch.no_grad():
         j = 0
         while bboxes[0, person_class_idx, j, 0] >= THRESHOLD:
             pt = (bboxes[0, person_class_idx, j, 1:] * scale).cpu().numpy()
-            data[j] = pt
-
-            try:
-                requests.put("http://localhost:3000/people", data=data)
-            except requests.exceptions.RequestException as e:
-                print('Failed to send people data to the webserver')
 
             distance = depth_map[int(pt[1])][int(pt[0])] # closest faces should be lowest values
 
@@ -146,9 +140,17 @@ with torch.no_grad():
             x = pt[0] / max_x # scale to 0-1
             y = 1.0 - distance # scale to 0-1
 
+            data[j] = [x, y, int(pt[2]), int(pt[3])]
+
             cv2.circle(bg, (int(map_width - (map_width * x)), int((map_height - map_height * y))), 8, (255, 255, 255), -1)
 
             j += 1
+
+        try:
+            requests.put("http://localhost:3000/people", data=data)
+        except requests.exceptions.RequestException as e:
+            print('Failed to send people data to the webserver')
+
         if show_map:
             cv2.imshow('map', bg)
 
