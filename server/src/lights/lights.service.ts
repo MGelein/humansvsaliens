@@ -1,23 +1,27 @@
 import { Injectable } from '@nestjs/common'
 
-type LightStateList = { [id: number]: number }
+import { ProgressService } from '../progress/progress.service'
 
 @Injectable()
 export class LightsService {
+  constructor(private readonly progressService: ProgressService) {}
 
-  lightStates: LightStateList = {}
-
-  list(): LightStateList {
-    return this.lightStates
-  }
+  numberOfLights: number = 5
 
   get(id: number): number {
-    return this.lightStates[id] ? this.lightStates[id] : 0.0
-  }
+    const totalProgress = this.progressService.get()
+    const max = (1 / this.numberOfLights) * id
+    const min = max - (1 / this.numberOfLights)
 
-  set(id: number, newState: number): boolean {
-    this.lightStates[id] = newState
-    return true
+    if (totalProgress >= max) {
+      return 1.0
+    }
+
+    if (totalProgress <= min) {
+      return 0.0
+    }
+
+    return (totalProgress - min) * this.numberOfLights
   }
 
 }

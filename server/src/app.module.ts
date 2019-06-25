@@ -15,6 +15,6 @@ import { ProgressService } from './progress/progress.service';
 @Module({
   imports: [GameModule],
   controllers: [AppController, LightsController, PeopleController, ProgressController],
-  providers: [LightsService, PeopleService, ProgressService],
+  providers: [PeopleService, ProgressService, LightsService],
 })
 export class AppModule {}

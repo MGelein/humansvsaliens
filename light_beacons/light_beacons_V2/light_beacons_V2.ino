@@ -19,7 +19,7 @@ const char* password = "Wachtwoord";
 
 int buildinLed = 2;
 
-int lightIndex = 3;
+int lightIndex = 1;
 
 int heartRate = 1;
 int heartMax = 254;
@@ -31,13 +31,17 @@ int brightness = 255;
 
 int currentHue = 49152;
 int currentSaturation = 255;
-int currentBrightness = 254;
+int currentBrightness = 255;
 
 int flash = 65536;
 
 String payload;
 
 bool up = false;
+
+unsigned long startMillis;
+unsigned long currentMillis;
+const unsigned long period = 100;
 
 void setup () {
   pinMode(buildinLed, OUTPUT);
@@ -71,7 +75,7 @@ void loop() {
   setColor(payload);
   updatePixels();
   heartBeat();
-  delay(10);
+  //  delay(10);
 }
 
 //    Sets the color of the pixels
@@ -79,19 +83,17 @@ void setColor(String inString) {
   int temp = inString.toFloat() * 1000;
   hue = map(temp, 0, 1000, 49152, 65536);
 
-//  Serial.print(payload);
-//  Serial.print("\t");
-//  Serial.print(temp);
-//  Serial.print("\t");
-//  Serial.print(currentHue);
-//  Serial.print("\t");
-//  Serial.print(hue);
-//  Serial.print("\t");
-//  Serial.print(checkPos(currentHue, hue));
-//  Serial.print("\t");
-//  Serial.println(currentBrightness);
-
-
+  //  Serial.print(payload);
+  //  Serial.print("\t");
+  //  Serial.print(temp);
+  //  Serial.print("\t");
+  //  Serial.print(currentHue);
+  //  Serial.print("\t");
+  //  Serial.print(hue);
+  //  Serial.print("\t");
+  //  Serial.print(checkPos(currentHue, hue));
+  //  Serial.print("\t");
+  //  Serial.println(currentBrightness);
 
   currentHue = currentHue + (checkPos(currentHue, hue) * 32);
 }
@@ -106,19 +108,26 @@ void setColorStart() {
 
 //    Production of the heartbeat (pulsing effect)
 void heartBeat() {
-  if (up == false) {
-    currentBrightness -= 2;
-  }
-  else if (up == true) {
-    currentBrightness += 2;
-  }
-  if (currentBrightness == heartMin) {
-    up = true;
-  }
-  if (currentBrightness == heartMax) {
-    up = false;
+  currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
+  if (currentMillis - startMillis >= period)  //test whether the period has elapsed
+  {
+    if (up == false) {
+      currentBrightness --;
+    }
+    if (up == true) {
+      currentBrightness ++;
+    }
+    if (currentBrightness == heartMin) {
+      up = true;
+    }
+    if (currentBrightness == heartMax) {
+      up = false;
+    }
+    startMillis = currentMillis;  //IMPORTANT to save the start time of the current LED state.
   }
 }
+
+
 
 //    Checking the position in which the
 int checkPos(int current, int target) {

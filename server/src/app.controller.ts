@@ -11,7 +11,13 @@ export class AppController {
   index(): any {
     return {
       progress: this.progressService.get(),
-      lights: this.lightsService.list(),
+      lights: {
+        1: this.lightsService.get(1),
+        2: this.lightsService.get(2),
+        3: this.lightsService.get(3),
+        4: this.lightsService.get(4),
+        5: this.lightsService.get(5),
+      },
       people: this.peopleService.list()
     }
   }

@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common'
+import { Controller, Get, Post, Body } from '@nestjs/common'
 import { ProgressService } from './progress.service'
 
 @Controller('progress')
@@ -10,11 +10,9 @@ export class ProgressController {
     return this.progressService.get()
   }
 
-  @Put()
+  @Post()
   update(@Body() body: string): boolean {
-    console.log(body)
-    console.log(parseFloat(body))
-    return this.progressService.set(parseFloat(body))
+    return this.progressService.set(Number(Object.keys(body)[0]))
   }
 
 }
