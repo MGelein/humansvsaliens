@@ -13,6 +13,9 @@ import { GameModule } from './game.module';
 import { ProgressController } from './progress/progress.controller';
 import { ProgressService } from './progress/progress.service';
 
+import { ScoresController } from './scores/scores.controller';
+import { ScoresService } from './scores/scores.service';
+
 import { CacheService } from './cache.service';
 
 @Module({
@@ -25,7 +28,7 @@ import { CacheService } from './cache.service';
       preventfill: true
     }
   })],
-  controllers: [AppController, LightsController, PeopleController, ProgressController],
-  providers: [CacheService, PeopleService, ProgressService, LightsService],
+  controllers: [AppController, LightsController, PeopleController, ProgressController, ScoresController],
+  providers: [CacheService, PeopleService, ProgressService, LightsService, ScoresService],
 })
 export class AppModule {}
