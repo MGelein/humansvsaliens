@@ -2,6 +2,8 @@
 class Salt extends RenderObj implements IUpdate {
   //The list of circles that still need to be drawn
   final ManagedList<ExpCircle> circles = new ManagedList<ExpCircle>();
+  //A list of all the people that are visible by the webcam
+  final ManagedList<Person> people = new ManagedList<Person>();
   //The graphics that the salt is drawn on
   PGraphics g;
 
@@ -25,6 +27,7 @@ class Salt extends RenderObj implements IUpdate {
   //Updates this layer
   void update() {
     circles.update();
+    people.update();
     g.beginDraw();
     g.fill(0, 50);
     g.rect(-10, -10, g.width + 20, g.height + 20);
@@ -32,6 +35,10 @@ class Salt extends RenderObj implements IUpdate {
     for (ExpCircle e : circles.list) {
       e.update();
       e.render(g);
+    }
+    for(Person p: people.list){
+      p.update();
+      p.render(g);
     }
     
     g.endDraw();
@@ -50,6 +57,33 @@ class Salt extends RenderObj implements IUpdate {
       t++;
       circles.add(new ExpCircle(pos, i, t / 5, size));
     }
+  }
+  
+  //Adds a person dot to the display
+  void addPeople(ArrayList<PVector> places){
+    people.list.clear();
+     for(int i = 0; i < places.size(); i++){
+       people.add(new Person(places.get(i)));
+     }
+  }
+}
+
+//A single person
+class Person extends RenderObj implements IUpdate{
+  PVector pos;
+  PVector tPos;
+  
+  Person(PVector place){
+    pos = new PVector(place.x * virus.W, place.y * virus.H);
+  }
+  
+  void update(){
+    
+  }
+  
+  void render(PGraphics g){
+    g.fill(255);
+    g.circle(pos.x, pos.y, 10);
   }
 }
 
