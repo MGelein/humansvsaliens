@@ -55,7 +55,7 @@ class Salt extends RenderObj implements IUpdate {
     int t = 0;
     for (int i = 0; i < size; i++) {
       t++;
-      circles.add(new ExpCircle(pos, i, t / 5, size));
+      circles.add(new ExpCircle(pos, i, t / 3, size));
     }
   }
 
