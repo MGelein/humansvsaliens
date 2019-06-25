@@ -1,11 +1,12 @@
 import { Controller, Get } from '@nestjs/common'
 import { ProgressService } from './progress/progress.service'
 import { LightsService } from './lights/lights.service'
+import { ScoresService } from './scores/scores.service'
 import { PeopleService } from './people/people.service'
 
 @Controller()
 export class AppController {
-  constructor(private readonly progressService: ProgressService, private readonly lightsService: LightsService, private readonly peopleService: PeopleService) {}
+  constructor(private readonly scoresService: ScoresService, private readonly progressService: ProgressService, private readonly lightsService: LightsService, private readonly peopleService: PeopleService) {}
 
   @Get()
   index(): any {
@@ -18,7 +19,8 @@ export class AppController {
         4: this.lightsService.get(4),
         5: this.lightsService.get(5),
       },
-      people: this.peopleService.list()
+      people: this.peopleService.list(),
+      scores: this.scoresService.list()
     }
   }
 }
