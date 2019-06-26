@@ -11,8 +11,13 @@ export class ScoresController {
     return await this.scoresService.list()
   }
 
+  @Get('top/:k')
+  async top(k: number): Promise<Score[]> {
+    return await this.scoresService.top(k)
+  }
+
   @Get(':name/:score')
-  async set(@Param('name') name, @Param('score') score): Promise<boolean> {
+  async set(@Param('name') name, @Param('score') score): Promise<Score> {
     return await this.scoresService.add(name, Number(score))
   }
 

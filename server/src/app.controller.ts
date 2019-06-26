@@ -20,7 +20,7 @@ export class AppController {
         5: this.lightsService.get(5),
       },
       people: this.peopleService.list(),
-      scores: await this.scoresService.list()
+      scores: await this.scoresService.top(3)
     }
   }
 }

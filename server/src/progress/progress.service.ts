@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 @Injectable()
 export class ProgressService {
 
-  progress: number = 0.2
+  progress: number = 0.0
 
   get(): number {
     return this.progress
