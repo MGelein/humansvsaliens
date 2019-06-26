@@ -12,11 +12,15 @@ class Game {
   //The score we've accumulated so far
   int score = 0;
   //The gamestates our game can be in
-  GameState state = GameState.RUN;
+  GameState state = GameState.LOST;
   //Used for screenshake
   PVector offset = new PVector();
   PVector vel = new PVector();
   
+  //The username of the last user
+  String username = "player";
+  
+  //The effect booleans
   boolean noisyScreen = false;
   boolean mirrorMovement = false;
   boolean slowShooting = false;
@@ -40,6 +44,14 @@ class Game {
     virus.restart();
     timeLeft = 7200;
     score = 0;
+    game.state = GameState.RUN;
+  }
+  
+  //Starts the submission process and makes the game ready for more play
+  void submitScore(){
+    game.state = GameState.READY;
+    gui.offX = 1000;
+    network.postScore(game.username, game.score);
   }
 
   void update() {    
@@ -97,6 +109,19 @@ class Game {
   //Called when the game is done
   void gameOver(){
     state = GameState.LOST;
+  }
+  
+  //Sent whenver we type in the lost screen
+  void typeKey(String letter, int keyCode){
+    letter = letter.toLowerCase();
+    String allowed = "abcdefghijklmnopqrstuvwxyz1234567890 ";
+    if(allowed.indexOf(letter) == -1){
+      if(keyCode == 8 && username.length() > 0) {
+        username = username.substring(0, username.length() - 1);
+      }
+    }else{
+      if(game.username.length() < 12) username += letter;
+    }
   }
 }
 

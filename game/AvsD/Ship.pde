@@ -69,10 +69,10 @@ class Ship extends RenderObj implements IUpdate{
   void render(PGraphics g){
     g.pushMatrix();
     g.translate(pos.x + 32, pos.y);
-    g.fill(virus.COL_GOOD);
+    g.fill(game.mirrorMovement ? virus.COL_VR : virus.COL_GOOD);
     g.triangle(0, -size, size / 2, 0, -size / 2, 0);
     g.triangle(0, size / 3, size / 3, 0, -size / 3, 0);
-    g.fill(virus.COL_VR);
+    g.fill(game.mirrorMovement ? virus.COL_GOOD : virus.COL_VR);
     g.circle(0, -size / 3, size / 3);
     g.popMatrix();
     //Draw the charge bar
@@ -91,7 +91,6 @@ class Ship extends RenderObj implements IUpdate{
     //Outer edge
     g.noFill();
     g.stroke(virus.COL_VR);
-    g.rect(8, buffer, 16, maxH);
-    
+    g.rect(8, buffer, 16, maxH);    
   }
 }

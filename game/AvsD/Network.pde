@@ -4,10 +4,13 @@ class Network implements IUpdate {
   final int PROGRESS_INTERVAL = 6;
   //The amount of frames that have passed
   int frames = 0;
+  //List of score entries
+  ScoreEntry[] topFive = new ScoreEntry[5];
   
   //Initializing the network
   Network() {
     game.updateList.add(this);
+    getTopFive();
   }
 
   //Update the network, this takes care of time management for the people
@@ -19,10 +22,18 @@ class Network implements IUpdate {
       if (frames % PROGRESS_INTERVAL == 0) postProgress();
     }
   }
+  
+  //Requests the latest top five from the API
+  void getTopFive(){
+    //http://localhost:3000/scores/top/5
+    for(int i = 0; i < 5; i++){
+      topFive[i] = new ScoreEntry();
+    }
+  }
 
-  // score/USER/VAL
-  void postScore(String name) {
-    loadStrings("http://localhost:3000/score/" + name + "/" + game.score);
+  //Post the score to the server
+  void postScore(String name, int score) {
+    loadStrings("http://localhost:3000/score/" + name + "/" + score);
   }
 
   //Posts the progress
@@ -44,4 +55,9 @@ class Network implements IUpdate {
       }
       salt.addPeople(places);
   }
+}
+
+class ScoreEntry{
+  String name = "empty";
+  int score = -1;
 }

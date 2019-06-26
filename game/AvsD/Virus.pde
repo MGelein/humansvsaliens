@@ -15,7 +15,7 @@ class Virus extends RenderObj implements IUpdate {
   //The color that signifies all is good
   final color COL_GOOD = color(0, 255, 100);
   //The color that signifies this is a tracked person
-  final color COL_P = color(255, 50, 255);
+  final color COL_P = color(255, 200, 255);
   //The size of the playing field
   final int W = (int) game.dim.x / 3;
   final int H = (int) game.dim.y;

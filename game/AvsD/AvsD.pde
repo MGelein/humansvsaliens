@@ -40,7 +40,15 @@ void draw(){
 
 //Handles keyPressed events and forwards to the Key manager
 void keyPressed(){
-  Key.setState(keyCode, true);
+  //If we press ANY KEY, then start the game
+  if(game.state == GameState.READY) game.restart();
+  else if(game.state == GameState.LOST){
+    if(keyCode == ENTER){
+      game.submitScore();
+    }else if((key + "").length() > 0){
+      game.typeKey(key + "", keyCode);
+    }
+  }else Key.setState(keyCode, true);
 }
 
 //Handles keyReleased events and forwards to the Key manager
