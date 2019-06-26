@@ -6,6 +6,8 @@ class GUI extends RenderObj implements IUpdate {
   int prevCP = 0;
   //The font we're using to draw the GUI
   PFont mainFont;
+  //What color to use
+  float effectCol = 0;
 
   GUI() {
     depth = 100;
@@ -21,6 +23,8 @@ class GUI extends RenderObj implements IUpdate {
 
   //Update all the necessary components
   void update() {
+    //Slowly ease back to 0
+    effectCol *= 0.98;
   }
 
   //Renders all the GUI components
@@ -37,15 +41,18 @@ class GUI extends RenderObj implements IUpdate {
     g.text("Control Points", left, yPos += yInc);
     drawProgress(left, yPos, g);
     g.text("Current effect", left, yPos += yInc);
-    g.textSize(10);
-    g.fill(virus.COL_VR, 200);
-    g.textSize(12);
+    g.fill(getEffectCol(), 200 + effectCol * 55);
     g.text(getEffect(virus.percentage), left + 5, yPos + yInc / 3);
     g.fill(virus.COL_VR);
+    g.textSize(12);
     g.text("Controls", left, yPos += yInc);
     g.textSize(10);
     g.fill(virus.COL_VR, 200);
     g.text("[SPACE] to shoot\n[ARROWS] to move", left + 5, yPos + yInc / 3);
+  }
+  
+  color getEffectCol(){
+    return lerpColor(virus.COL_VR, virus.COL_GOOD, effectCol);
   }
   
   //Returns the description of the virus effect
@@ -79,6 +86,8 @@ class GUI extends RenderObj implements IUpdate {
     }
     if(prevCP != lastCP) {
       prevCP = lastCP;
+      if(prevCP == 5) game.gameOver();
+      game.setEffect(prevCP);
       //Do a poof
       game.shake(10);
     }

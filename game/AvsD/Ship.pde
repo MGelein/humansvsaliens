@@ -37,9 +37,9 @@ class Ship extends RenderObj implements IUpdate{
   
   //Handles the key-input
   void keyInput(){
-    if(Key.isDown(LEFT)){
+    if(Key.isDown(game.mirrorMovement ? RIGHT : LEFT)){
       vel.x -= force;
-    }else if(Key.isDown(RIGHT)){
+    }else if(Key.isDown(game.mirrorMovement ? LEFT : RIGHT)){
       vel.x += force;
     }
     

@@ -16,6 +16,11 @@ class Game {
   //Used for screenshake
   PVector offset = new PVector();
   PVector vel = new PVector();
+  
+  boolean noisyScreen = false;
+  boolean mirrorMovement = false;
+  boolean slowShooting = false;
+  boolean shakyScreen = false;
 
   void init() {
     salt.init();
@@ -41,8 +46,12 @@ class Game {
     //Update all the items
     updateList.updateAll();
     //Decrease time left to play
-    timeLeft --;
-    score += (1 - virus.percentage) * 5 + 1;
+    if(game.state == GameState.RUN) {
+      timeLeft --;
+      score += (1 - virus.percentage) * 5 + 1;
+      
+      if(shakyScreen) shake(2);
+    }
     
     offset.add(vel);
     vel.mult(0.8);
@@ -63,7 +72,31 @@ class Game {
     g.background(0);
     //Render all the items
     renderList.renderAll(g);
+    if(noisyScreen) makeNoise(g);
     g.endDraw();
+  }
+  
+  //Make a bit of static
+  void makeNoise(PGraphics g){
+    for(int count = 0; count < 5000; count ++){
+      int i = (int) random(0, g.pixels.length);
+      g.pixels[i] = virus.COL_VR;
+    }
+  }
+  
+  //Sets the currently active effect
+  void setEffect(int num){
+    gui.effectCol = 1;
+    slowShooting = mirrorMovement = noisyScreen = shakyScreen = false;
+    if(num == 1) slowShooting = true;
+    else if(num == 3) mirrorMovement = true;
+    else if(num == 2) noisyScreen = true;
+    else if(num == 4) shakyScreen = true;
+  }
+  
+  //Called when the game is done
+  void gameOver(){
+    state = GameState.LOST;
   }
 }
 
