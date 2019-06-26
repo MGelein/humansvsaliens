@@ -8,13 +8,18 @@ export interface Person {
     h: number
 }
 
+const TTLInSeconds = 5
+
 @Injectable()
 export class PeopleService {
 
   people: Person[] = []
 
+  lastUpdated: Date = new Date()
+
   list(): Person[] {
-    return this.people
+    if ((Date.now() - this.lastUpdated.getTime()) < TTLInSeconds * 1000) return this.people
+    return []
   }
 
   update(newPeople: Person[]): boolean {

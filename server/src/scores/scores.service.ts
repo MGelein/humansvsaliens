@@ -3,8 +3,10 @@ import { Injectable } from '@nestjs/common'
 import { StorageService } from '../storage.service'
 
 export interface Score {
-  id: string;
+  id: number;
+  name: string;
   score: number;
+  recordedAt: Date
 }
 
 @Injectable()
@@ -17,7 +19,7 @@ export class ScoresService {
 
     if (!scores) scores = []
 
-    scores.push({ id: scores.length, name: name, score: score, recordedAt: new Date() })
+    scores.push({ id: scores.length, name: name, score: score, recordedAt: new Date() } as Score)
     this.storageService.set('scores', scores)
 
     return true
