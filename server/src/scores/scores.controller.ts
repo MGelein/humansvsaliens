@@ -12,8 +12,8 @@ export class ScoresController {
   }
 
   @Get('top/:k')
-  async top(k: number): Promise<Score[]> {
-    return await this.scoresService.top(k)
+  async top(@Param('k') k): Promise<Score[]> {
+    return await this.scoresService.top(Number(k))
   }
 
   @Get(':name/:score')
