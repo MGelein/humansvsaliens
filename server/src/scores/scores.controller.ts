@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common'
-import { ScoresService } from './scores.service'
+import { ScoresService, Score } from './scores.service'
 
 @Controller('scores')
 export class ScoresController {
@@ -7,13 +7,13 @@ export class ScoresController {
   constructor(private readonly scoresService: ScoresService) {}
 
   @Get()
-  list(): Score[] {
-    return this.scoresService.list()
+  async list(): Promise<Score[]> {
+    return await this.scoresService.list()
   }
 
-  @Get(':id/:score')
-  set(@Param('id') id, @Param('score') score): boolean {
-    return this.scoresService.add(id, Number(score))
+  @Get(':name/:score')
+  async set(@Param('name') name, @Param('score') score): Promise<boolean> {
+    return await this.scoresService.add(name, Number(score))
   }
 
 }

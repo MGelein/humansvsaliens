@@ -2013,7 +2013,7 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mkdirp@^0.5.0, mkdirp@^0.5.1:
+mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
@@ -2099,6 +2099,13 @@ node-fetch@^2.3.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
+
+node-persist@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/node-persist/-/node-persist-3.0.4.tgz#c1bb2a7216eec334ab8587edbbe5b535012f96e5"
+  integrity sha512-/0r1KYqeEKrVvxwQ513rAUG7sNndoi+qgXdRutfaaRWc4axVeoINq2s5vOZ6xVUWKm67ML0gR5UhBuha6M8VJg==
+  dependencies:
+    mkdirp "~0.5.1"
 
 node-pre-gyp@^0.12.0:
   version "0.12.0"

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 
-import { CacheService } from '../cache.service'
+import { StorageService } from '../storage.service'
 
-interface Score {
+export interface Score {
   id: string;
   score: number;
 }
@@ -10,17 +10,22 @@ interface Score {
 @Injectable()
 export class ScoresService {
 
-  constructor(private readonly cacheService: CacheService) {}
+  constructor(private readonly storageService: StorageService) {}
 
-  scores: Score[] = []
+  async add(name: string, score: number): Promise<boolean> {
+    let scores = await this.storageService.get('scores')
 
-  add(id: string, score: number): boolean {
-    this.scores.push({ id: id, score: score })
+    if (!scores) scores = []
+
+    scores.push({ id: scores.length, name: name, score: score, recordedAt: new Date() })
+    this.storageService.set('scores', scores)
+
     return true
   }
 
-  list(): Score[] {
-    return this.scores
+  async list(): Promise<Score[]> {
+    const scores = await this.storageService.get('scores')
+    return scores
   }
 
 }

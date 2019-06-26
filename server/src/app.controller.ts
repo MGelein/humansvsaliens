@@ -9,7 +9,7 @@ export class AppController {
   constructor(private readonly scoresService: ScoresService, private readonly progressService: ProgressService, private readonly lightsService: LightsService, private readonly peopleService: PeopleService) {}
 
   @Get()
-  index(): any {
+  async index(): any {
     return {
       progress: this.progressService.get(),
       lights: {
@@ -20,7 +20,7 @@ export class AppController {
         5: this.lightsService.get(5),
       },
       people: this.peopleService.list(),
-      scores: this.scoresService.list()
+      scores: await this.scoresService.list()
     }
   }
 }
