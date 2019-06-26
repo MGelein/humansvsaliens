@@ -11,6 +11,11 @@ class Game {
   int timeLeft = 7200;
   //The score we've accumulated so far
   int score = 0;
+  //The gamestates our game can be in
+  GameState state = GameState.RUN;
+  //Used for screenshake
+  PVector offset = new PVector();
+  PVector vel = new PVector();
 
   void init() {
     salt.init();
@@ -38,6 +43,18 @@ class Game {
     //Decrease time left to play
     timeLeft --;
     score += (1 - virus.percentage) * 5 + 1;
+    
+    offset.add(vel);
+    vel.mult(0.8);
+    vel.add(offset.copy().rotate(PI).mult(0.8));
+    offset.mult(0.9);
+    //Stop shaking after a while
+    if(offset.magSq() < 1) offset.set(0, 0);
+  }
+  
+  //Shakes the game with a specified amount of force
+  void shake(float force){
+    vel.add((PVector.random2D()).mult(force));
   }
 
   //Render all the graphics of the game to the sub-canvas
@@ -77,4 +94,8 @@ class UpdateList extends ManagedList<IUpdate> {
     //Update the list, do maintenance, remove and add items
     update();
   }
+}
+
+enum GameState{
+  RUN, LOST, READY
 }

@@ -1,5 +1,9 @@
 class GUI extends RenderObj implements IUpdate {
 
+  //The lastCP that was lit
+  int lastCP = 0;
+  //Previous frame this was the last one
+  int prevCP = 0;
   //The font we're using to draw the GUI
   PFont mainFont;
 
@@ -67,9 +71,16 @@ class GUI extends RenderObj implements IUpdate {
     g.line(r / 2, r, (5.0f * virus.percentage) * inc, r);
     g.strokeWeight(1);
     for (int i = 0; i < 5; i++) {
-      g.fill(virus.percentage > (i + .5) * 0.2f ? virus.COL_VR: virus.COL_GOOD);
+      boolean lit = virus.percentage > (i + .5) * 0.2f;
+      g.fill(lit ? virus.COL_VR: virus.COL_GOOD);
+      if(lit) lastCP = i + 1;
       g.stroke(virus.COL_VR);
       g.circle((i + .5) * inc + r / 2, r, r);
+    }
+    if(prevCP != lastCP) {
+      prevCP = lastCP;
+      //Do a poof
+      game.shake(10);
     }
     g.fill(virus.COL_VR);
     g.popMatrix();

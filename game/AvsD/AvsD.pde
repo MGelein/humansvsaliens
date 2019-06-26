@@ -32,7 +32,7 @@ void draw(){
   //Render to your own canvas
   game.render();
   //Render the game canvas and stretch it to the correct size
-  image(game.g, 0, 0, width, height);
+  image(game.g, game.offset.x, game.offset.y, width, height);
   //Draw the game-fps to the screen
   fill(virus.COL_VR, 100);
   text(((int) frameRate) + " fps", 5, 15);

@@ -16,6 +16,8 @@ class Ship extends RenderObj implements IUpdate{
   
   //Updating the movement code, and handling keyinput
   void update(){
+    //Ignore any non-run gamestate
+    if(game.state != GameState.RUN) return;
     pos.add(vel);
     vel.mult(0.95);
     if(pos.x > virus.W - size / 2){
@@ -25,6 +27,9 @@ class Ship extends RenderObj implements IUpdate{
       pos.x = size / 2;
       vel.x = 0;
     }
+    
+    vel.y += (virus.H - size - pos.y) * .8;
+    pos.y += (virus.H - size - pos.y) * 0.3;
     
     //Handles the key-input
     keyInput();
@@ -57,6 +62,7 @@ class Ship extends RenderObj implements IUpdate{
     game.updateList.add(new Bullet(this, sqrt(charge)));
     //Reset the charge after shooting
     charge = 0;
+    vel.y += 5;
   }
   
   //Renders the ship to the graphics buffer
