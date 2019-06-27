@@ -22,14 +22,22 @@ class Salt extends RenderObj implements IUpdate {
   //Renders the salt layer on top of the virus
   void render(PGraphics g) {
     //g.image(this.g, 0, 0);
+    
+    //Draw the overlay that should be visible for the players
+    for(Person p : people.list){
+      g.fill(virus.COL_P);
+      g.circle(p.pos.x, p.pos.y, 16);
+    }
   }
 
   //Updates this layer
   void update() {
+    //Ignore any non-run state
+    if(game.state != GameState.RUN) return;
     circles.update();
     people.update();
     g.beginDraw();
-    g.fill(0, 50);
+    g.fill(0, 100);
     g.rect(-10, -10, g.width + 20, g.height + 20);
     //See if we need to draw any expanding circles
     for (ExpCircle e : circles.list) {

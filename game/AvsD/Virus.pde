@@ -5,7 +5,7 @@ class Virus extends RenderObj implements IUpdate {
   //The amplitude of the noise gen loop
   final float NOISE_A = .6;
   //The closer this factor comes to 1, the faster the virus spreads
-  final float SPREAD_CTRL = 1.1f;
+  final float SPREAD_CTRL = 1.2f;
   //The color of the background
   final color COL_BG = color(0);
   //The color of the virus
@@ -14,6 +14,8 @@ class Virus extends RenderObj implements IUpdate {
   final color COL_WH = color(200, 200, 255);
   //The color that signifies all is good
   final color COL_GOOD = color(0, 255, 100);
+  //The color that signifies this is a tracked person
+  final color COL_P = color(255, 200, 255);
   //The size of the playing field
   final int W = (int) game.dim.x / 3;
   final int H = (int) game.dim.y;
@@ -57,6 +59,9 @@ class Virus extends RenderObj implements IUpdate {
     hbAngle += hbSpeed;
     hb = sin(hbAngle) * .1 + .1;
     offNoise -= hbSpeed;
+    
+    //Only run this code in the actual game
+    if(game.state != GameState.RUN) return;
 
     salt.g.loadPixels();
     int virusPixels = 0;

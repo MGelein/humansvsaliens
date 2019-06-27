@@ -16,6 +16,8 @@ class Ship extends RenderObj implements IUpdate{
   
   //Updating the movement code, and handling keyinput
   void update(){
+    //Ignore any non-run gamestate
+    if(game.state != GameState.RUN) return;
     pos.add(vel);
     vel.mult(0.95);
     if(pos.x > virus.W - size / 2){
@@ -26,15 +28,18 @@ class Ship extends RenderObj implements IUpdate{
       vel.x = 0;
     }
     
+    vel.y += (virus.H - size - pos.y) * .8;
+    pos.y += (virus.H - size - pos.y) * 0.3;
+    
     //Handles the key-input
     keyInput();
   }
   
   //Handles the key-input
   void keyInput(){
-    if(Key.isDown(LEFT)){
+    if(Key.isDown(game.mirrorMovement ? RIGHT : LEFT)){
       vel.x -= force;
-    }else if(Key.isDown(RIGHT)){
+    }else if(Key.isDown(game.mirrorMovement ? LEFT : RIGHT)){
       vel.x += force;
     }
     
@@ -57,16 +62,17 @@ class Ship extends RenderObj implements IUpdate{
     game.updateList.add(new Bullet(this, sqrt(charge)));
     //Reset the charge after shooting
     charge = 0;
+    vel.y += 5;
   }
   
   //Renders the ship to the graphics buffer
   void render(PGraphics g){
     g.pushMatrix();
     g.translate(pos.x + 32, pos.y);
-    g.fill(virus.COL_GOOD);
+    g.fill(game.mirrorMovement ? virus.COL_VR : virus.COL_GOOD);
     g.triangle(0, -size, size / 2, 0, -size / 2, 0);
     g.triangle(0, size / 3, size / 3, 0, -size / 3, 0);
-    g.fill(virus.COL_VR);
+    g.fill(game.mirrorMovement ? virus.COL_GOOD : virus.COL_VR);
     g.circle(0, -size / 3, size / 3);
     g.popMatrix();
     //Draw the charge bar
@@ -85,7 +91,6 @@ class Ship extends RenderObj implements IUpdate{
     //Outer edge
     g.noFill();
     g.stroke(virus.COL_VR);
-    g.rect(8, buffer, 16, maxH);
-    
+    g.rect(8, buffer, 16, maxH);    
   }
 }
