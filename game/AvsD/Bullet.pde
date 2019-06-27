@@ -40,7 +40,10 @@ class Bullet extends RenderObj implements IUpdate{
   
   //Adds an explosion on the salt layer, then die
   void explode(){
+    soundManager.explosion.stop();
+    soundManager.explosion.play();
     salt.addExplosion(pos, (int) (strength * 2.5));
+    game.score += (int) strength * 2.5;
     die(); 
   }
   

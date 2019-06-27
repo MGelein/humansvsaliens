@@ -52,6 +52,7 @@ class Game {
   
   //Starts the submission process and makes the game ready for more play
   void submitScore(){
+    soundManager.bleep.play();
     game.state = GameState.READY;
     gui.offX = 1000;
     network.postScore(game.username, game.score);

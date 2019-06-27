@@ -2,7 +2,7 @@
 import java.util.*;
 import processing.sound.*;
 
-//Self ref, used in the soudn stuff
+//Self ref, used in the sound stuff
 PApplet app;
 
 //The global game variable. This contains the game-manager

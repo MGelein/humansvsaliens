@@ -58,6 +58,8 @@ class Ship extends RenderObj implements IUpdate{
   
   //Shoots a projectile after charging for a bit
   void shoot(){
+    soundManager.shoot.stop();
+    soundManager.shoot.play();
     if(charge < 16) charge = 16;
     game.updateList.add(new Bullet(this, sqrt(charge)));
     //Reset the charge after shooting

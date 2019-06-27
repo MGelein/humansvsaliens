@@ -12,6 +12,7 @@ class SoundManager implements IUpdate {
   float playVolT = 0;
   SoundFile capture;
   SoundFile bleep;
+  SoundFile explosion;
 
   //The max amplitude of any music file
   float musicVol = 0.5;
@@ -27,7 +28,14 @@ class SoundManager implements IUpdate {
     playMusic = new SoundFile(app, "sound/background.wav");
     capture = new SoundFile(app, "sound/impact1.wav");
     lost = new SoundFile(app, "sound/impact2.wav");
+    bleep = new SoundFile(app, "sound/select.wav");
+    explosion = new SoundFile(app, "sound/explosion.wav");
+    shoot = new SoundFile(app, "sound/shoot.wav");
     capture.amp(fxVol);
+    lost.amp(fxVol);
+    bleep.amp(fxVol);
+    explosion.amp(fxVol * .4);
+    shoot.amp(fxVol * .25);
     
     startMenuMusic();
   }
