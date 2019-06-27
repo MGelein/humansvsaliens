@@ -37,7 +37,7 @@ class Salt extends RenderObj implements IUpdate {
     circles.update();
     people.update();
     g.beginDraw();
-    g.fill(0, 50);
+    g.fill(0, 100);
     g.rect(-10, -10, g.width + 20, g.height + 20);
     //See if we need to draw any expanding circles
     for (ExpCircle e : circles.list) {

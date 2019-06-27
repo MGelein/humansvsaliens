@@ -5,7 +5,7 @@ class Virus extends RenderObj implements IUpdate {
   //The amplitude of the noise gen loop
   final float NOISE_A = .6;
   //The closer this factor comes to 1, the faster the virus spreads
-  final float SPREAD_CTRL = 1.1f;
+  final float SPREAD_CTRL = 1.2f;
   //The color of the background
   final color COL_BG = color(0);
   //The color of the virus

@@ -12,7 +12,7 @@ class Game {
   //The score we've accumulated so far
   int score = 0;
   //The gamestates our game can be in
-  GameState state = GameState.LOST;
+  GameState state = GameState.READY;
   //Used for screenshake
   PVector offset = new PVector();
   PVector vel = new PVector();
@@ -90,9 +90,11 @@ class Game {
   
   //Make a bit of static
   void makeNoise(PGraphics g){
-    for(int count = 0; count < 5000; count ++){
-      int i = (int) random(0, g.pixels.length);
-      g.pixels[i] = virus.COL_VR;
+    int i1, i2, max = g.pixels.length;
+    for(int count = 0; count < max; count ++){
+      i1 = (int) random(0, max);
+      i2 = (int) random(0, max);
+      g.pixels[i1] = g.pixels[i2];
     }
   }
   
