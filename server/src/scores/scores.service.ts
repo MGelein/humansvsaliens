@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import { PeopleService } from '../people/people.service'
 import { StorageService } from '../storage.service'
 
 export interface Score {
@@ -7,18 +8,26 @@ export interface Score {
   rank?: number;
   name: string;
   result: number;
-  recordedAt: Date
+  involvedPeopleCount: number;
+  recordedAt: string
 }
 
 @Injectable()
 export class ScoresService {
 
-  constructor(private readonly storageService: StorageService) {}
+  constructor(private readonly storageService: StorageService, private readonly peopleService: PeopleService) {}
 
   async add(name: string, result: number): Promise<Score> {
     let scores = await this.list()
 
-    const newScore: Score = { id: scores.length, name: name, result: result, recordedAt: new Date() }
+    const newScore: Score = {
+      id: scores.length,
+      name: name,
+      result: result,
+      involvedPeopleCount: this.peopleService.getHighestCountAndReset(),
+      recordedAt: new Date().toJSON()
+    }
+    
     scores.push(newScore)
     this.storageService.set('scores', scores)
 

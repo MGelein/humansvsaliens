@@ -24,7 +24,7 @@ export class ScoresController {
   }
 
   @Get(':name/:result')
-  async set(@Param('name') name, @Param('result') result, @Query() query: any): Promise<Score | string> {
+  async add(@Param('name') name, @Param('result') result, @Query() query: any): Promise<Score | string> {
     const score = await this.scoresService.add(name, Number(result))
 
     if (query.csv !== undefined) {
