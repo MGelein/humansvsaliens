@@ -8,7 +8,7 @@ export interface Person {
     h: number
 }
 
-const TTLInSeconds = 5
+const TTLInSeconds = 500
 
 @Injectable()
 export class PeopleService {
