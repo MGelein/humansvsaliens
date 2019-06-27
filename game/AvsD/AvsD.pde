@@ -1,5 +1,9 @@
 //Java util is necessary for sorting of arraylists
 import java.util.*;
+import processing.sound.*;
+
+//Self ref, used in the soudn stuff
+PApplet app;
 
 //The global game variable. This contains the game-manager
 final Game game = new Game();
@@ -8,6 +12,7 @@ final Salt salt = new Salt();
 final GUI gui = new GUI();
 final Network network = new Network();
 final Ship ship = new Ship();
+final SoundManager soundManager = new SoundManager();
 
 //Add the keycode for the spacebar
 final int SPACE = 32;
@@ -18,6 +23,7 @@ void setup(){
   //fullScreen(P2D);
   size(960, 540, P2D);
   hint(DISABLE_TEXTURE_MIPMAPS);
+  app = this;
   ((PGraphicsOpenGL)g).textureSampling(2);
   //Initialize the game, start loading assets, etc
   game.init();

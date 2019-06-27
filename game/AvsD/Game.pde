@@ -37,10 +37,13 @@ class Game {
     g.endDraw();
     //Init the gui
     gui.init();
+    //Init the sounds
+    soundManager.init();
   }
 
   //Resets the game-parameters
   void restart() {
+    soundManager.startGameMusic();
     virus.restart();
     timeLeft = 7200;
     score = 0;
@@ -100,6 +103,7 @@ class Game {
   
   //Sets the currently active effect
   void setEffect(int num){
+    soundManager.capture.play();
     gui.effectCol = 1;
     slowShooting = mirrorMovement = noisyScreen = shakyScreen = false;
     if(num == 1) slowShooting = true;
@@ -111,6 +115,7 @@ class Game {
   //Called when the game is done
   void gameOver(){
     state = GameState.LOST;
+    soundManager.startMenuMusic();
   }
   
   //Sent whenver we type in the lost screen
