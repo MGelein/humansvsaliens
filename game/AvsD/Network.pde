@@ -19,6 +19,8 @@ class Network implements IUpdate {
   
   void init(){
     getTopFive();
+    //For the first time, please reset progress
+    loadStrings(progressURL + 0);
   }
 
   //Update the network, this takes care of time management for the people

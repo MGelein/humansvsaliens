@@ -122,8 +122,8 @@ class Person extends RenderObj implements IUpdate {
   }
 
   void update() {
-    PVector diff = PVector.sub(tPos, pos);
-    pos.add(diff.mult(0.1));
+    //PVector diff = PVector.sub(tPos, pos);
+    //pos.add(diff.mult(0.1));
   }
   
   //Sets the target to ease towards
