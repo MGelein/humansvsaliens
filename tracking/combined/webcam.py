@@ -42,7 +42,7 @@ map_height = 400
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 
-THRESHOLD = 0.2
+THRESHOLD = 0.15
 
 def get_bounding_boxes(frame):
     x = torch.from_numpy(transform(frame)[0]).permute(2, 0, 1)

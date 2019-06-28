@@ -11,8 +11,8 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-const char* ssid = "interwebs";
-const char* password = "Wachtwoord";
+const char* ssid = "Analog vs Digital";
+const char* password = "kaasstengels";
 
 //const char* ssid = "Dollard_2.4GHz";
 //const char* password = "ik54j3s94rgq";
@@ -69,7 +69,7 @@ void loop() {
     reqCurrentMillis = millis();
     if (reqCurrentMillis - reqStartMillis >= reqPeriod) {
       HTTPClient http;  //Declare an object of class HTTPClient
-      http.begin("http://192.168.43.67:3000/lights/" + String(lightIndex));
+      http.begin("http://192.168.0.100:3000/lights/" + String(lightIndex));
       int httpCode = http.GET();
 
       if (httpCode > 0) {
@@ -106,15 +106,15 @@ void setColor(String inString) {
   //  Serial.print("\t");
   //  Serial.print(checkPos(currentHue, hue));
   //  Serial.print("\t");
-  Serial.print(currentBrightness);
-  Serial.print("\t");
-  Serial.print(currentSaturation);
-  Serial.print("\t");
-  Serial.print(saturation);
-  Serial.print("\t");
-  Serial.print(checkPos(currentSaturation, saturation));
-  Serial.print("\t");
-  Serial.println(overtaken);
+    Serial.print(currentBrightness);
+    Serial.print("\t");
+    Serial.print(currentSaturation);
+    Serial.print("\t");
+    Serial.print(saturation);
+    Serial.print("\t");
+    Serial.print(checkPos(currentSaturation, saturation));
+    Serial.print("\t");
+    Serial.println(overtaken);
 
   currentHue = currentHue + (checkPos(currentHue, hue) * 32);
 }
