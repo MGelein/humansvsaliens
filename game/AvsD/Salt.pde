@@ -23,11 +23,14 @@ class Salt extends RenderObj implements IUpdate {
   void render(PGraphics g) {
     //g.image(this.g, 0, 0);
     
+    g.pushMatrix();
+    g.translate(32, 0);
     //Draw the overlay that should be visible for the players
     for(Person p : people.list){
       g.fill(virus.COL_P);
       g.circle(p.pos.x, p.pos.y, 16);
     }
+    g.popMatrix();
   }
 
   //Updates this layer
@@ -115,6 +118,7 @@ class Person extends RenderObj implements IUpdate {
 
   Person(PVector place) {
     pos = new PVector(place.x * virus.W, place.y * virus.H);
+    tPos = pos.copy();
   }
 
   void update() {
