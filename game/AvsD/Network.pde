@@ -5,8 +5,8 @@ class Network implements IUpdate {
   final String peopleURL = serverURL + "people/csv/";
   final String topURL = scoresURL + "top/5?csv";
   //People interval, in frames
-  final int PEOPLE_INTERVAL = 30;
-  final int PROGRESS_INTERVAL = 6;
+  final int PEOPLE_INTERVAL = 31;
+  final int PROGRESS_INTERVAL = 29;
   //The amount of frames that have passed
   int frames = 0;
   //List of score entries

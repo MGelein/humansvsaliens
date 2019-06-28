@@ -150,6 +150,8 @@ class GUI extends RenderObj implements IUpdate {
   }
   
   void renderTopFive(PGraphics g){
+    //Update the top five every second
+    if(frameCount % 60 == 0) network.getTopFive();
     g.pushMatrix();
     g.translate(74, 132);
     float yOff = 18;
