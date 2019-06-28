@@ -47,7 +47,7 @@ const unsigned long flashPeriod = 5;
 
 void setup () {
   pinMode(buildinLed, OUTPUT);
-  Serial.begin(115200);
+  Serial.begin(9600);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -67,25 +67,30 @@ void loop() {
     reqCurrentMillis = millis();
     if (reqCurrentMillis - reqStartMillis >= reqPeriod) {
       HTTPClient http;  //Declare an object of class HTTPClient
-      http.begin("http://192.168.0.100:3000/lights/" + String(lightIndex));
+      http.setTimeout(250);
+      Serial.print("OPening connection... response: ");
+      http.begin("http://192.168.0.200:3000/lights/" + String(lightIndex));
       int httpCode = http.GET();
-
+      Serial.print(String(httpCode));
       if (httpCode > 0 && httpCode < 300) {
         payload = http.getString();
       }
       http.end();
-      reqStartMillis = reqCurrentMillis;
+      Serial.println(".... closing");
+      //If the http request took long to process, be sure to set the timestamp to right now, because otherwise it will try to do multiple request in the time that passed
+      reqStartMillis = millis();
 
     }
     setColor(payload);
-    updatePixels();
-    overtakeFlash();
-    heartBeat();
 
     if (overtaken == true && currentHue != flash) {
       overtaken = false;
     }
   }
+
+  updatePixels();
+  overtakeFlash();
+  heartBeat();
 }
 
 
