@@ -53,6 +53,7 @@ class Network implements IUpdate {
   //Post the score to the server
   void postScore(String name, int score) {
     loadStrings(scoresURL + name + "/" + score);
+    loadStrings(progressURL + 0);
   }
 
   //Posts the progress

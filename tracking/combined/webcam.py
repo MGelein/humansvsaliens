@@ -71,6 +71,7 @@ transform = BaseTransform(net.size, (104/256.0, 117/256.0, 123/256.0))
 # Initialize Monodepth2
 if torch.cuda.is_available():
     device = torch.device("cuda")
+    print("GPU BOiii")
 else:
     device = torch.device("cpu")
 

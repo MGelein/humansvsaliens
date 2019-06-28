@@ -124,7 +124,7 @@ class Game {
   //Sent whenver we type in the lost screen
   void typeKey(String letter, int keyCode){
     letter = letter.toLowerCase();
-    String allowed = "abcdefghijklmnopqrstuvwxyz1234567890 ";
+    String allowed = "abcdefghijklmnopqrstuvwxyz1234567890";
     if(allowed.indexOf(letter) == -1){
       if(keyCode == 8 && username.length() > 0) {
         username = username.substring(0, username.length() - 1);
