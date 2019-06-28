@@ -39,6 +39,7 @@ class Game {
     gui.init();
     //Init the sounds
     soundManager.init();
+    network.init();
   }
 
   //Resets the game-parameters

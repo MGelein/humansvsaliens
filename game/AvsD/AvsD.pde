@@ -20,8 +20,8 @@ final int SPACE = 32;
 //Handles the initialization of the game
 void setup(){
   //Set the current window size. For testing, otherwise fullscreen
-  //fullScreen(P2D);
-  size(960, 540, P2D);
+  fullScreen(P2D);
+  //size(960, 540, P2D);
   hint(DISABLE_TEXTURE_MIPMAPS);
   app = this;
   ((PGraphicsOpenGL)g).textureSampling(2);
