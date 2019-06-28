@@ -1,3 +1,4 @@
+
 class Game {
   //The list of renderables
   final RenderList renderList = new RenderList();

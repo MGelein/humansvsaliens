@@ -1,6 +1,8 @@
 class Network implements IUpdate {
-  final String serverURL = "http://localhost:3000/";
+  final String serverURL = "http://192.168.0.100:3000/";
   final String scoresURL = serverURL + "scores/";
+  final String progressURL = serverURL + "progress/";
+  final String peopleURL = serverURL + "people/csv/";
   final String topURL = scoresURL + "top/5?csv";
   //People interval, in frames
   final int PEOPLE_INTERVAL = 30;
@@ -55,13 +57,13 @@ class Network implements IUpdate {
 
   //Posts the progress
   void postProgress() {
-    loadStrings("http://localhost:3000/progress/" + virus.percentage);
+    loadStrings(progressURL + virus.percentage);
   }
 
   //Updates the people
   void getPeople() {
     ArrayList<PVector> places = new ArrayList<PVector>();
-      String[] lines = loadStrings("http://localhost:3000/people/csv/");
+      String[] lines = loadStrings(peopleURL);
       for (String line : lines) {
         if (line.trim().length() < 1) continue;
         String[] parts = line.split(",");
