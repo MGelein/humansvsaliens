@@ -44,10 +44,16 @@ const unsigned long reqPeriod = 500;
 unsigned long flashStartMillis;
 unsigned long flashCurrentMillis;
 const unsigned long flashPeriod = 5;
+HTTPClient http;  //Declare an object of class HTTPClient
+
+//Amount of failed responses
+byte tries = 0;
+      
+
 
 void setup () {
   pinMode(buildinLed, OUTPUT);
-  Serial.begin(115200);
+  Serial.begin(9600);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -60,32 +66,44 @@ void setup () {
 
   pixels.begin(); // This initializes the NeoPixel library.
   setColorStart();
+  http.setTimeout(500);
+
 }
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
     reqCurrentMillis = millis();
     if (reqCurrentMillis - reqStartMillis >= reqPeriod) {
-      HTTPClient http;  //Declare an object of class HTTPClient
-      http.begin("http://192.168.0.100:3000/lights/" + String(lightIndex));
+      Serial.print("OPening connection... response: ");
+      http.begin("192.168.0.200", 3000, "/lights/" + String(lightIndex) + "/");
+      //http.begin("http://192.168.0.200:3000/lights/" + String(lightIndex) + "/");
       int httpCode = http.GET();
-
+      Serial.print(String(httpCode));
       if (httpCode > 0 && httpCode < 300) {
         payload = http.getString();
+        tries = 0;//We go a succesfull response
+      }else{
+        tries++;
+        if(tries > 4) ESP.restart();
       }
       http.end();
-      reqStartMillis = reqCurrentMillis;
+      Serial.println(".... closing");
+      //If the http request took long to process, be sure to set the timestamp to right now, because otherwise it will try to do multiple request in the time that passed
+      reqStartMillis = millis();
 
     }
     setColor(payload);
-    updatePixels();
-    overtakeFlash();
-    heartBeat();
 
     if (overtaken == true && currentHue != flash) {
       overtaken = false;
     }
   }
+
+  updatePixels();
+  overtakeFlash();
+  heartBeat();
+
+  delay(10);
 }
 
 
@@ -104,15 +122,15 @@ void setColor(String inString) {
   //  Serial.print("\t");
   //  Serial.print(checkPos(currentHue, hue));
   //  Serial.print("\t");
-  Serial.print(currentBrightness);
-  Serial.print("\t");
-  Serial.print(currentSaturation);
-  Serial.print("\t");
-  Serial.print(saturation);
-  Serial.print("\t");
-  Serial.print(checkPos(currentSaturation, saturation));
-  Serial.print("\t");
-  Serial.println(overtaken);
+//  Serial.print(currentBrightness);
+//  Serial.print("\t");
+//  Serial.print(currentSaturation);
+//  Serial.print("\t");
+//  Serial.print(saturation);
+//  Serial.print("\t");
+//  Serial.print(checkPos(currentSaturation, saturation));
+//  Serial.print("\t");
+//  Serial.println(overtaken);
 
   currentHue = currentHue + (checkPos(currentHue, hue) * 32);
 }
