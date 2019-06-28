@@ -1,3 +1,4 @@
+
 class Game {
   //The list of renderables
   final RenderList renderList = new RenderList();
@@ -39,6 +40,7 @@ class Game {
     gui.init();
     //Init the sounds
     soundManager.init();
+    network.init();
   }
 
   //Resets the game-parameters

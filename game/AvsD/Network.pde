@@ -1,15 +1,23 @@
 class Network implements IUpdate {
+  final String serverURL = "http://192.168.0.100:3000/";
+  final String scoresURL = serverURL + "scores/";
+  final String progressURL = serverURL + "progress/";
+  final String peopleURL = serverURL + "people/csv/";
+  final String topURL = scoresURL + "top/5?csv";
   //People interval, in frames
-  final int PEOPLE_INTERVAL = 30;
-  final int PROGRESS_INTERVAL = 6;
+  final int PEOPLE_INTERVAL = 31;
+  final int PROGRESS_INTERVAL = 29;
   //The amount of frames that have passed
   int frames = 0;
   //List of score entries
-  ScoreEntry[] topFive = new ScoreEntry[5];
+  ArrayList<Score> topScores = new ArrayList<Score>();
   
   //Initializing the network
   Network() {
     game.updateList.add(this);
+  }
+  
+  void init(){
     getTopFive();
   }
 
@@ -25,26 +33,37 @@ class Network implements IUpdate {
   
   //Requests the latest top five from the API
   void getTopFive(){
-    //http://localhost:3000/scores/top/5
-    for(int i = 0; i < 5; i++){
-      topFive[i] = new ScoreEntry();
+    String[] lines = loadStrings(topURL);
+    topScores.clear();
+    for(String line: lines){
+      Score s = new Score();
+      String[] parts = line.split(",");
+      if(parts.length < 3) continue;
+      s.name = parts[1];
+      s.score = parts[2];
+      topScores.add(s);
+    }
+    
+    //Pad it to the correct size
+    while(topScores.size() < 5){
+      topScores.add(new Score());
     }
   }
 
   //Post the score to the server
   void postScore(String name, int score) {
-    loadStrings("http://localhost:3000/score/" + name + "/" + score);
+    loadStrings(scoresURL + name + "/" + score);
   }
 
   //Posts the progress
   void postProgress() {
-    loadStrings("http://localhost:3000/progress/" + virus.percentage);
+    loadStrings(progressURL + virus.percentage);
   }
 
   //Updates the people
   void getPeople() {
     ArrayList<PVector> places = new ArrayList<PVector>();
-      String[] lines = loadStrings("http://localhost:3000/people/csv/");
+      String[] lines = loadStrings(peopleURL);
       for (String line : lines) {
         if (line.trim().length() < 1) continue;
         String[] parts = line.split(",");
@@ -57,7 +76,7 @@ class Network implements IUpdate {
   }
 }
 
-class ScoreEntry{
+class Score{
   String name = "empty";
-  int score = -1;
+  String score = "";
 }

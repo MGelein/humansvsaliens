@@ -150,13 +150,15 @@ class GUI extends RenderObj implements IUpdate {
   }
   
   void renderTopFive(PGraphics g){
+    //Update the top five every second
+    if(frameCount % 60 == 0) network.getTopFive();
     g.pushMatrix();
     g.translate(74, 132);
     float yOff = 18;
-    for(int i = 0; i < network.topFive.length; i++){
+    for(int i = 0; i < network.topScores.size(); i++){
       g.text((i + 1), 0, 0);
-      g.text(network.topFive[i].name, 16, 0);
-      g.text(network.topFive[i].score, 128, 0);
+      g.text(network.topScores.get(i).name, 16, 0);
+      g.text(network.topScores.get(i).score, 128, 0);
       g.translate(0, yOff);
     }
     g.popMatrix();
