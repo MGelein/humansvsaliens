@@ -1,5 +1,5 @@
 class Network implements IUpdate {
-  final String serverURL = "http://192.168.0.100:3000/";
+  final String serverURL = "http://192.168.0.200:3000/";
   final String scoresURL = serverURL + "scores/";
   final String progressURL = serverURL + "progress/";
   final String peopleURL = serverURL + "people/csv/";
