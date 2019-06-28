@@ -38,7 +38,7 @@ bool up = false;
 //    Request Timer
 unsigned long reqStartMillis;
 unsigned long reqCurrentMillis;
-const unsigned long reqPeriod = 100;
+const unsigned long reqPeriod = 500;
 
 //    Flash Timer
 unsigned long flashStartMillis;
@@ -63,8 +63,6 @@ void setup () {
 }
 
 void loop() {
-
-
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
     reqCurrentMillis = millis();
     if (reqCurrentMillis - reqStartMillis >= reqPeriod) {
@@ -72,7 +70,7 @@ void loop() {
       http.begin("http://192.168.0.100:3000/lights/" + String(lightIndex));
       int httpCode = http.GET();
 
-      if (httpCode > 0) {
+      if (httpCode > 0 && httpCode < 300) {
         payload = http.getString();
       }
       http.end();
@@ -106,15 +104,15 @@ void setColor(String inString) {
   //  Serial.print("\t");
   //  Serial.print(checkPos(currentHue, hue));
   //  Serial.print("\t");
-    Serial.print(currentBrightness);
-    Serial.print("\t");
-    Serial.print(currentSaturation);
-    Serial.print("\t");
-    Serial.print(saturation);
-    Serial.print("\t");
-    Serial.print(checkPos(currentSaturation, saturation));
-    Serial.print("\t");
-    Serial.println(overtaken);
+  Serial.print(currentBrightness);
+  Serial.print("\t");
+  Serial.print(currentSaturation);
+  Serial.print("\t");
+  Serial.print(saturation);
+  Serial.print("\t");
+  Serial.print(checkPos(currentSaturation, saturation));
+  Serial.print("\t");
+  Serial.println(overtaken);
 
   currentHue = currentHue + (checkPos(currentHue, hue) * 32);
 }
@@ -172,5 +170,3 @@ void overtakeFlash() {
     flashStartMillis = flashCurrentMillis;
   }
 }
-
-
