@@ -49,6 +49,7 @@ class Game {
     virus.restart();
     timeLeft = 7200;
     score = 0;
+    ship.shootCounter = 0;
     game.state = GameState.RUN;
   }
 
@@ -58,7 +59,19 @@ class Game {
     game.state = GameState.READY;
     gui.offX = 1000;
     network.postScore(game.username, game.score);
+    saveClickCount();
   }
+  
+  void saveClickCount(){
+    String[] lines = loadStrings("clicks.txt");
+    String[] newLines = new String[lines.length + 1];
+    for(int i = 0; i < lines.length; i++){
+      newLines[i] = lines[i];
+    }
+    newLines[lines.length  ] = ship.shootCounter + "";
+    saveStrings("clicks.txt", newLines);
+  }
+    
 
   void update() {    
     //Update all the items
