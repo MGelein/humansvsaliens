@@ -26,23 +26,28 @@ from data import BaseTransform
 from ssd import build_ssd
 
 # Config
-webcam_index = 0 # 0 for built-in webcam, 1 for external webcam (generally)
+webcam_index = 1 # 0 for built-in webcam, 1 for external webcam (generally)
 max_face_size = 220 # based on the actual_face_size of people very close to the camera
-max_x = 850 # basically the webcam frame width
-max_y = 200 # max distance at which we detect people (based on the actual_face_size)
+
+min_x = 300
+max_x = 750 # basically the webcam frame width
 
 DEPTH_MODEL_NAME = 'mono_1024x320'
 
 print_fps = True # print FPS to stdout
 show_webcam = True
+show_depth_map = True
 show_map = True # show a map of the people in window while running
 map_width = 400
 map_height = 400
 
+min_distance = 0.05
+max_distance = 0.13
+
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 
-THRESHOLD = 0.15
+THRESHOLD = 0.25
 
 def get_bounding_boxes(frame):
     x = torch.from_numpy(transform(frame)[0]).permute(2, 0, 1)
@@ -134,19 +139,23 @@ with torch.no_grad():
             pt = (bboxes[0, person_class_idx, j, 1:] * scale).cpu().numpy()
 
             distance = depth_map[int(pt[1])][int(pt[0])] # closest faces should be lowest values
+            # y_distance = int(pt[1]) + int(pt[2])
+
+            # if distance < max_distance:
+            #     if distance > min_distance:
+            scaled_distance = (max(min(distance, max_distance), min_distance) - min_distance) / (max_distance - min_distance)
 
             cv2.rectangle(input_image, (int(pt[0]), int(pt[1])), (int(pt[2]), int(pt[3])), (255, 128, 0), 1)
             cv2.putText(input_image, str(distance), (int(pt[0]), int(pt[1])), FONT, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
 
-            x = pt[0] / max_x # scale to 0-1
-            y = 1.0 - distance # scale to 0-1
+            x = (max(min(pt[0], max_x), min_x) - min_x) / (max_x - min_x) # scale to 0-1
+            y = 1.0 - scaled_distance # scale to 0-1
 
             data[j] = [x, y, int(pt[2]), int(pt[3])]
 
-            cv2.circle(bg, (int(map_width - (map_width * x)), int((map_height - map_height * y))), 8, (255, 255, 255), -1)
+            cv2.circle(bg, (int(map_width * x), int((map_height - map_height * y))), 4, (255, 255, 255), -1)
 
             j += 1
-
         try:
             requests.put("http://localhost:3000/people", data=data)
         except requests.exceptions.RequestException as e:
@@ -154,6 +163,9 @@ with torch.no_grad():
 
         if show_map:
             cv2.imshow('map', bg)
+
+        if show_depth_map:
+            cv2.imshow('depth', depth_map)
 
         if show_webcam:
             # ann_frame = annotate_image(frame, bboxes)
