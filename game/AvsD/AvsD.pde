@@ -80,11 +80,16 @@ void postProgress() {
 
 //Posts the progress
 void postProgress(float percentage) {
+  if(network.postingProgress) return;
+  network.postingProgress = true;
   loadStrings(network.progressURL + percentage);
+  network.postingProgress = false;
 }
 
 //Updates the people
 void getPeople() {
+  if(network.retrievingPeople) return;
+  network.retrievingPeople = true;
   ArrayList<PVector> places = new ArrayList<PVector>();
   String[] lines = loadStrings(network.peopleURL);
   for (String line : lines) {
@@ -96,4 +101,5 @@ void getPeople() {
     places.add(new PVector(x, (y *-1 + 1)));
   }
   salt.addPeople(places);
+  network.retrievingPeople = false;
 }

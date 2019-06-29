@@ -7,6 +7,8 @@ class Network implements IUpdate {
   //People interval, in frames
   final int PEOPLE_INTERVAL = 31;
   final int PROGRESS_INTERVAL = 29;
+  boolean postingProgress = false;
+  boolean retrievingPeople = false;
   //The amount of frames that have passed
   int frames = 0;
   //List of score entries
