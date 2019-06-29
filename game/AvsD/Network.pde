@@ -73,7 +73,7 @@ class Network implements IUpdate {
         if (parts.length < 5) continue;
         float x = parseFloat(parts[1]);
         float y = parseFloat(parts[2]);
-        places.add(new PVector(x, y));
+        places.add(new PVector(x, (y *-1 + 1)));
       }
       salt.addPeople(places);
   }

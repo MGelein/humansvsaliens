@@ -27,8 +27,10 @@ class Salt extends RenderObj implements IUpdate {
     g.translate(32, 0);
     //Draw the overlay that should be visible for the players
     for(Person p : people.list){
-      g.fill(virus.COL_P);
-      g.circle(p.pos.x, p.pos.y, 16);
+      salt.addExplosion(p.pos, 32);
+      g.fill(virus.COL_GOOD);
+      g.noStroke();
+      g.circle(p.pos.x, p.pos.y, 10);
     }
     g.popMatrix();
   }
@@ -72,25 +74,32 @@ class Salt extends RenderObj implements IUpdate {
 
   //Adds a person dot to the display
   void addPeople(ArrayList<PVector> places) {
-    for(Person p : people.list){
-      p.updated = false;
+    for(Person p: people.list) people.rem(p);
+    for(PVector pos: places){
+      Person match = new Person(pos);
+      people.add(match);
     }
+      
+    //for(Person p : people.list){
+    //  p.updated = false;
+    //}
     
-    //Try to find a match for all the places
-    for(PVector place: places){
-      Person match = getClosestPerson(place);
-      if(match == null) {
-        match = new Person(place);
-        people.add(match);
-      }
-      match.setTarget(place);
-    }
+    ////Try to find a match for all the places
+    //for(PVector place: places){
+    //  Person match = getClosestPerson(place);
+    //  if(match == null) {
+    //    match = new Person(place);
+    //    people.add(match);
+    //  }
+    //  match.setTarget(place);
+    //}
     
     
-    //Remove any unupdated person
-    for(Person p : people.list){
-      if(!p.updated) people.rem(p);
-    }
+    ////Remove any unupdated person
+    //for(Person p : people.list){
+    //  if(!p.updated) people.rem(p);
+    //  p.die();
+    //}
   }
 
   //Finds the closest match to the provided position
@@ -114,12 +123,13 @@ class Salt extends RenderObj implements IUpdate {
 class Person extends RenderObj implements IUpdate {
   PVector pos;
   PVector tPos;
-  boolean updated = false;
+  boolean updated = true;
 
   Person(PVector place) {
     pos = new PVector(place.x * virus.W, place.y * virus.H);
     tPos = pos.copy();
   }
+    
 
   void update() {
     //PVector diff = PVector.sub(tPos, pos);

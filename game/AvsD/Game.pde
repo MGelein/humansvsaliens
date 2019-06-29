@@ -17,10 +17,10 @@ class Game {
   //Used for screenshake
   PVector offset = new PVector();
   PVector vel = new PVector();
-  
+
   //The username of the last user
   String username = "player";
-  
+
   //The effect booleans
   boolean noisyScreen = false;
   boolean mirrorMovement = false;
@@ -51,9 +51,9 @@ class Game {
     score = 0;
     game.state = GameState.RUN;
   }
-  
+
   //Starts the submission process and makes the game ready for more play
-  void submitScore(){
+  void submitScore() {
     soundManager.bleep.play();
     game.state = GameState.READY;
     gui.offX = 1000;
@@ -64,23 +64,24 @@ class Game {
     //Update all the items
     updateList.updateAll();
     //Decrease time left to play
-    if(game.state == GameState.RUN) {
+    if (game.state == GameState.RUN) {
       timeLeft --;
-      score += (1 - virus.percentage) * 5 + 1;
-      
-      if(shakyScreen) shake(2);
+      score += ((1 - virus.percentage) * 5 + 1);
+      //* (Key.isDown(UP) ? 2: 1);
+
+      if (shakyScreen) shake(2);
     }
-    
+
     offset.add(vel);
     vel.mult(0.8);
     vel.add(offset.copy().rotate(PI).mult(0.8));
     offset.mult(0.9);
     //Stop shaking after a while
-    if(offset.magSq() < 1) offset.set(0, 0);
+    if (offset.magSq() < 1) offset.set(0, 0);
   }
-  
+
   //Shakes the game with a specified amount of force
-  void shake(float force){
+  void shake(float force) {
     vel.add((PVector.random2D()).mult(force));
   }
 
@@ -90,47 +91,48 @@ class Game {
     g.background(0);
     //Render all the items
     renderList.renderAll(g);
-    if(noisyScreen) makeNoise(g);
+    if (noisyScreen) makeNoise(g);    
+
     g.endDraw();
   }
-  
+
   //Make a bit of static
-  void makeNoise(PGraphics g){
+  void makeNoise(PGraphics g) {
     int i1, i2, max = g.pixels.length;
-    for(int count = 0; count < max; count ++){
+    for (int count = 0; count < max; count ++) {
       i1 = (int) random(0, max);
       i2 = (int) random(0, max);
       g.pixels[i1] = g.pixels[i2];
     }
   }
-  
+
   //Sets the currently active effect
-  void setEffect(int num){
+  void setEffect(int num) {
     soundManager.capture.play();
     gui.effectCol = 1;
     slowShooting = mirrorMovement = noisyScreen = shakyScreen = false;
-    if(num == 1) slowShooting = true;
-    else if(num == 3) mirrorMovement = true;
-    else if(num == 2) noisyScreen = true;
-    else if(num == 4) shakyScreen = true;
+    if (num == 1) slowShooting = true;
+    else if (num == 3) mirrorMovement = true;
+    else if (num == 2) noisyScreen = true;
+    else if (num == 4) shakyScreen = true;
   }
-  
+
   //Called when the game is done
-  void gameOver(){
+  void gameOver() {
     state = GameState.LOST;
     soundManager.startMenuMusic();
   }
-  
+
   //Sent whenver we type in the lost screen
-  void typeKey(String letter, int keyCode){
+  void typeKey(String letter, int keyCode) {
     letter = letter.toLowerCase();
     String allowed = "abcdefghijklmnopqrstuvwxyz1234567890";
-    if(allowed.indexOf(letter) == -1){
-      if(keyCode == 8 && username.length() > 0) {
+    if (allowed.indexOf(letter) == -1) {
+      if (keyCode == 8 && username.length() > 0) {
         username = username.substring(0, username.length() - 1);
       }
-    }else{
-      if(game.username.length() < 12) username += letter;
+    } else {
+      if (game.username.length() < 12) username += letter;
     }
   }
 }
@@ -164,6 +166,6 @@ class UpdateList extends ManagedList<IUpdate> {
   }
 }
 
-enum GameState{
+enum GameState {
   RUN, LOST, READY
 }
