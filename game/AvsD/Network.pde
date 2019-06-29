@@ -28,8 +28,8 @@ class Network implements IUpdate {
     frames ++;
     //Depdning on gamestate, do network queries
     if (game.state == GameState.RUN) {
-      if (frames % PEOPLE_INTERVAL == 0) getPeople();
-      if (frames % PROGRESS_INTERVAL == 0) postProgress();
+      if (frames % PEOPLE_INTERVAL == 0) thread("getPeople");
+      if (frames % PROGRESS_INTERVAL == 0) thread("postProgress");
     }
   }
   
@@ -58,25 +58,7 @@ class Network implements IUpdate {
     loadStrings(progressURL + 0);
   }
 
-  //Posts the progress
-  void postProgress() {
-    loadStrings(progressURL + virus.percentage);
-  }
-
-  //Updates the people
-  void getPeople() {
-    ArrayList<PVector> places = new ArrayList<PVector>();
-      String[] lines = loadStrings(peopleURL);
-      for (String line : lines) {
-        if (line.trim().length() < 1) continue;
-        String[] parts = line.split(",");
-        if (parts.length < 5) continue;
-        float x = parseFloat(parts[1]);
-        float y = parseFloat(parts[2]);
-        places.add(new PVector(x, (y *-1 + 1)));
-      }
-      salt.addPeople(places);
-  }
+  
 }
 
 class Score{

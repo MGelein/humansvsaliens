@@ -95,7 +95,7 @@ class Game {
 
     g.endDraw();
   }
-
+ 
   //Make a bit of static
   void makeNoise(PGraphics g) {
     int i1, i2, max = g.pixels.length;
