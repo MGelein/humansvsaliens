@@ -138,6 +138,7 @@ with torch.no_grad():
         while bboxes[0, person_class_idx, j, 0] >= THRESHOLD:
             pt = (bboxes[0, person_class_idx, j, 1:] * scale).cpu().numpy()
 
+            # distance = depth_map[int(min(depth_map.shape[1], pt[1] + 0.5 * pt[3]))][int(min(depth_map.shape[0], pt[0] + 0.5 * pt[2]))] # closest faces should be lowest values
             distance = depth_map[int(pt[1])][int(pt[0])] # closest faces should be lowest values
             # y_distance = int(pt[1]) + int(pt[2])
 
@@ -165,7 +166,8 @@ with torch.no_grad():
             cv2.imshow('map', bg)
 
         if show_depth_map:
-            cv2.imshow('depth', depth_map)
+            depth_map_scaled = cv2.resize(depth_map, (640, 480))
+            cv2.imshow('depth', depth_map_scaled)
 
         if show_webcam:
             # ann_frame = annotate_image(frame, bboxes)
