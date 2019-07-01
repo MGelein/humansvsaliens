@@ -18,7 +18,7 @@ final SoundManager soundManager = new SoundManager();
 final int SPACE = 32;
 
 //Handles the initialization of the game
-void setup(){
+void setup() {
   //Set the current window size. For testing, otherwise fullscreen
   fullScreen(P2D);
   //size(960, 540, P2D);
@@ -32,7 +32,7 @@ void setup(){
 }
 
 //Renders and updates the game in the main loop
-void draw(){
+void draw() {
   //Update your state
   game.update();
   //Render to your own canvas
@@ -45,20 +45,20 @@ void draw(){
 }
 
 //Handles keyPressed events and forwards to the Key manager
-void keyPressed(){
+void keyPressed() {
   //If we press ANY KEY, then start the game
-  if(game.state == GameState.READY) game.restart();
-  else if(game.state == GameState.LOST){
-    if(keyCode == ENTER){
+  if (game.state == GameState.READY) game.restart();
+  else if (game.state == GameState.LOST) {
+    if (keyCode == ENTER) {
       game.submitScore();
-    }else if((key + "").length() > 0){
+    } else if ((key + "").length() > 0) {
       game.typeKey(key + "", keyCode);
     }
-  }else Key.setState(keyCode, true);
+  } else Key.setState(keyCode, true);
 }
 
 //Handles keyReleased events and forwards to the Key manager
-void keyReleased(){
+void keyReleased() {
   Key.setState(keyCode, false);
 }
 
@@ -72,4 +72,34 @@ interface IUpdate {
 abstract class RenderObj {
   int depth = 0;
   abstract void render(PGraphics g);
+}
+
+void postProgress() {
+  postProgress(virus.percentage);
+}
+
+//Posts the progress
+void postProgress(float percentage) {
+  if(network.postingProgress) return;
+  network.postingProgress = true;
+  loadStrings(network.progressURL + percentage);
+  network.postingProgress = false;
+}
+
+//Updates the people
+void getPeople() {
+  if(network.retrievingPeople) return;
+  network.retrievingPeople = true;
+  ArrayList<PVector> places = new ArrayList<PVector>();
+  String[] lines = loadStrings(network.peopleURL);
+  for (String line : lines) {
+    if (line.trim().length() < 1) continue;
+    String[] parts = line.split(",");
+    if (parts.length < 5) continue;
+    float x = parseFloat(parts[1]);
+    float y = parseFloat(parts[2]);
+    places.add(new PVector(x, (y *-1 + 1)));
+  }
+  salt.addPeople(places);
+  network.retrievingPeople = false;
 }

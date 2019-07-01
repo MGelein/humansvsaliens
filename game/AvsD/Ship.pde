@@ -6,6 +6,7 @@ class Ship extends RenderObj implements IUpdate{
   final float maxCharge = 512;
   boolean charging = false;//If we're charging the shooting mechanism
   float charge = 0;
+  int shootCounter = 0;
   
   Ship(){
     game.renderList.add(this);
@@ -52,6 +53,7 @@ class Ship extends RenderObj implements IUpdate{
       if(charging){
         charging = false;
         shoot();
+        shootCounter ++;
       }
     }
   }

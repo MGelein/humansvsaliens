@@ -15,7 +15,7 @@ class SoundManager implements IUpdate {
   SoundFile explosion;
 
   //The max amplitude of any music file
-  float musicVol = 0.5;
+  float musicVol = 0.8;
   float fxVol = 0.5;
 
   SoundManager() {
